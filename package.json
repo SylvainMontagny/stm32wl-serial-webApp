@@ -1,0 +1,17 @@
+{
+  "name": "web-serial-project",
+  "version": "1.0.0",
+  "description": "Un projet pour gérer la communication avec des appareils série via le Web.",
+  "main": "src/js/main.js",
+  "scripts": {
+    "start": "live-server src"
+  },
+  "dependencies": {
+    "web-serial-project": "file:"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
