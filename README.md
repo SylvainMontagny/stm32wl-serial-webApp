@@ -20,7 +20,7 @@ Ce projet est une application web qui permet de communiquer avec des appareils s
 
 1. Clonez le dépôt:
    ```bash
-   git clone <url-du-dépôt>
+   git clone https://github.com/Maxime272003/web-serial-project.git
    cd web-serial-project
    ```
 
