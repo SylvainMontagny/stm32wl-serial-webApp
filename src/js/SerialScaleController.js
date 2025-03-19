@@ -67,34 +67,80 @@ export default class SerialScaleController {
         if (this.buffer.includes("\n")) {
           const messages = this.buffer.split("\n");
           this.buffer = messages.pop();
-          messages.forEach((message) =>
-            this.displayMessage(this.cleanMessage(message))
-          );
+          messages.forEach((message) => this.displayMessage(message));
         }
       }
     }
-  }
-
-  cleanMessage(message) {
-    let cleanedMessage = message
-      .replace(/\x1B\[[0-9;]*[A-Za-z]/g, "")
-      .replace(/\x1B/g, "")
-      .trim();
-
-    const lines = cleanedMessage.split("\n");
-    if (this.firstLine && lines.length > 0) {
-      lines.shift();
-      this.firstLine = false;
-    }
-
-    return lines.join("\n");
   }
 
   displayMessage(message) {
     const messageContainer = document.querySelector(
       "#serial-messages-container .message"
     );
-    messageContainer.innerText += message + "\n";
-    messageContainer.scrollTop = messageContainer.scrollHeight;
+
+    // Traitement des codes ANSI
+    message = this.parseAnsiCodes(message);
+
+    // Ajouter le message au conteneur
+    if (message.includes("<span")) {
+      // Si le message contient déjà des balises HTML (après parsing ANSI)
+      messageContainer.innerHTML += message + "\n";
+    } else {
+      // Sinon, utiliser innerText pour éviter les injections
+      const textNode = document.createTextNode(message + "\n");
+      messageContainer.appendChild(textNode);
+    }
+
+    const autoScrollEnabled = document.getElementById("auto-scroll").checked;
+    if (autoScrollEnabled) {
+      const scrollContainer = document.getElementById(
+        "serial-messages-container"
+      );
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    }
+  }
+
+  parseAnsiCodes(text) {
+    // Codes de contrôle du terminal
+    text = text.replace(/\x1b\[\d+;\d+H/g, ""); // Positionnement du curseur
+    text = text.replace(/\x1b\[\d+J/g, ""); // Effacement de l'écran
+
+    // Traitement des séquences de couleur ANSI
+    return text.replace(/\x1b\[(\d+)m/g, (match, code) => {
+      code = parseInt(code, 10);
+
+      // Codes de couleur de texte standard (30-37)
+      if (code >= 30 && code <= 37) {
+        const colors = [
+          "black",
+          "red",
+          "green",
+          "yellow",
+          "blue",
+          "magenta",
+          "cyan",
+          "white",
+        ];
+        return `<span class="ansi-${colors[code - 30]}">`;
+      }
+
+      // Codes de couleur de texte brillants (90-97)
+      if (code >= 90 && code <= 97) {
+        const colors = [
+          "black",
+          "red",
+          "green",
+          "yellow",
+          "blue",
+          "magenta",
+          "cyan",
+          "white",
+        ];
+        return `<span class="ansi-bright-${colors[code - 90]}">`;
+      }
+
+      // Si le code n'est pas géré, retourner une chaîne vide
+      return "";
+    });
   }
 }

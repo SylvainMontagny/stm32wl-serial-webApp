@@ -24,19 +24,41 @@ body {
 #serial-messages-container {
     width: 75%;
     height: 400px;
-    border: 1px solid #ccc;
+    border: 1px solid #333;
     padding: 20px;
-    background-color: #fff;
+    background-color: #000; /* Fond noir pour le terminal */
+    color: #f0f0f0; /* Texte clair */
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    font-family: 'Courier New', monospace; /* Police type terminal */
 }
 
 .message {
     word-wrap: break-word;
+    white-space: pre-wrap;
+    flex-grow: 1;
 }
+
+/* Classes pour les couleurs ANSI */
+.ansi-black { color: #000000; }
+.ansi-red { color: #FF0000; }
+.ansi-green { color: #00FF00; }
+.ansi-yellow { color: #FFFF00; }
+.ansi-blue { color: #0000FF; }
+.ansi-magenta { color: #FF00FF; }
+.ansi-cyan { color: #00FFFF; }
+.ansi-white { color: #FFFFFF; }
+.ansi-bright-black { color: #808080; }
+.ansi-bright-red { color: #FF5555; }
+.ansi-bright-green { color: #55FF55; }
+.ansi-bright-yellow { color: #FFFF55; }
+.ansi-bright-blue { color: #5555FF; }
+.ansi-bright-magenta { color: #FF55FF; }
+.ansi-bright-cyan { color: #55FFFF; }
+.ansi-bright-white { color: #FFFFFF; }
 
 .input-container {
     margin: 20px 0;
