@@ -2,7 +2,10 @@
   "name": "web-serial-project",
   "version": "1.0.0",
   "description": "Un projet pour gérer la communication avec des appareils série via le Web.",
-  "main": "src/js/main.js",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
