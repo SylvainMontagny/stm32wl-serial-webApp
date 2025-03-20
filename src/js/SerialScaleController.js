@@ -7,6 +7,7 @@ export default class SerialScaleController {
     this.firstLine = true;
     this.buffer = "";
     this.port = null;
+    this.currentColorClass = null;
   }
 
   async init() {
@@ -73,22 +74,88 @@ export default class SerialScaleController {
     }
   }
 
+  parseAnsiCodes(text) {
+    text = text.replace(/\x1b(?!\[)/g, "");
+    text = text.replace(/\x1b\[\d+;\d+H/g, "");
+    text = text.replace(/\x1b\[\d+J/g, "");
+
+    let result = "";
+    let segments = text.split(/(\x1b\[\d+m)/);
+    let currentSpanOpen = false;
+
+    if (this.currentColorClass && !text.startsWith("\x1b[")) {
+      result += `<span class="${this.currentColorClass}">`;
+      currentSpanOpen = true;
+    }
+
+    segments.forEach((segment) => {
+      if (segment.match(/\x1b\[\d+m/)) {
+        const code = parseInt(segment.match(/\x1b\[(\d+)m/)[1], 10);
+
+        if (currentSpanOpen) {
+          result += "</span>";
+          currentSpanOpen = false;
+        }
+
+        if (code === 0) {
+          this.currentColorClass = null;
+          return;
+        }
+
+        if (code >= 30 && code <= 37) {
+          const colors = [
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "magenta",
+            "cyan",
+            "white",
+          ];
+          const colorClass = `ansi-${colors[code - 30]}`;
+          this.currentColorClass = colorClass;
+          result += `<span class="${colorClass}">`;
+          currentSpanOpen = true;
+        } else if (code >= 90 && code <= 97) {
+          const colors = [
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "magenta",
+            "cyan",
+            "white",
+          ];
+          const colorClass = `ansi-bright-${colors[code - 90]}`;
+          this.currentColorClass = colorClass;
+          result += `<span class="${colorClass}">`;
+          currentSpanOpen = true;
+        }
+      } else {
+        result += segment;
+      }
+    });
+    return result;
+  }
+
   displayMessage(message) {
     const messageContainer = document.querySelector(
       "#serial-messages-container .message"
     );
 
-    // Traitement des codes ANSI
     message = this.parseAnsiCodes(message);
 
-    // Ajouter le message au conteneur
     if (message.includes("<span")) {
-      // Si le message contient déjà des balises HTML (après parsing ANSI)
       messageContainer.innerHTML += message + "\n";
     } else {
-      // Sinon, utiliser innerText pour éviter les injections
-      const textNode = document.createTextNode(message + "\n");
-      messageContainer.appendChild(textNode);
+      if (this.currentColorClass) {
+        messageContainer.innerHTML += `<span class="${this.currentColorClass}">${message}</span>\n`;
+      } else {
+        const textNode = document.createTextNode(message + "\n");
+        messageContainer.appendChild(textNode);
+      }
     }
 
     const autoScrollEnabled = document.getElementById("auto-scroll").checked;
@@ -98,49 +165,5 @@ export default class SerialScaleController {
       );
       scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
-  }
-
-  parseAnsiCodes(text) {
-    // Codes de contrôle du terminal
-    text = text.replace(/\x1b\[\d+;\d+H/g, ""); // Positionnement du curseur
-    text = text.replace(/\x1b\[\d+J/g, ""); // Effacement de l'écran
-
-    // Traitement des séquences de couleur ANSI
-    return text.replace(/\x1b\[(\d+)m/g, (match, code) => {
-      code = parseInt(code, 10);
-
-      // Codes de couleur de texte standard (30-37)
-      if (code >= 30 && code <= 37) {
-        const colors = [
-          "black",
-          "red",
-          "green",
-          "yellow",
-          "blue",
-          "magenta",
-          "cyan",
-          "white",
-        ];
-        return `<span class="ansi-${colors[code - 30]}">`;
-      }
-
-      // Codes de couleur de texte brillants (90-97)
-      if (code >= 90 && code <= 97) {
-        const colors = [
-          "black",
-          "red",
-          "green",
-          "yellow",
-          "blue",
-          "magenta",
-          "cyan",
-          "white",
-        ];
-        return `<span class="ansi-bright-${colors[code - 90]}">`;
-      }
-
-      // Si le code n'est pas géré, retourner une chaîne vide
-      return "";
-    });
   }
 }

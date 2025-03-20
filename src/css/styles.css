@@ -26,14 +26,14 @@ body {
     height: 400px;
     border: 1px solid #333;
     padding: 20px;
-    background-color: #000; /* Fond noir pour le terminal */
-    color: #f0f0f0; /* Texte clair */
+    background-color: #000;
+    color: #f0f0f0; 
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    font-family: 'Courier New', monospace; /* Police type terminal */
+    font-family: 'Courier New', monospace;
 }
 
 .message {
@@ -79,4 +79,37 @@ body {
     padding: 8px 20px;
     font-size: 16px;
     cursor: pointer;
+}
+
+/* Styles pour le toggle auto-scroll */
+.toggle-container {
+    position: relative;
+    display: inline-block;
+}
+
+.toggle-container input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggle-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.toggle-container input[type="checkbox"]:checked + .toggle-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.toggle-container input[type="checkbox"]:focus + .toggle-btn {
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
