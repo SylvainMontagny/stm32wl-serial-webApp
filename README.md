@@ -7,6 +7,7 @@ Ce projet est une application web qui permet de communiquer avec des appareils s
 ## Structure du projet
 
 - `src/`: Contient tous les fichiers sources de l'application.
+
   - `css/`: Dossier contenant les fichiers CSS.
     - `styles.css`: Styles pour l'application.
   - `js/`: Dossier contenant les fichiers JavaScript.
@@ -19,9 +20,10 @@ Ce projet est une application web qui permet de communiquer avec des appareils s
 ## Installation
 
 1. Clonez le dépôt:
+
    ```bash
-   git clone https://github.com/Maxime272003/web-serial-project.git
-   cd web-serial-project
+   git clone https://github.com/SylvainMontagny/stm32wl-serial-webApp.git
+   cd stm32wl-serial-webApp
    ```
 
 2. Installez les dépendances:
