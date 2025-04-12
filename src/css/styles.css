@@ -1,115 +1,276 @@
 /* styles.css - Ce fichier contient les styles CSS pour l'application */
 
+@font-face {
+  font-family: "SegoeUI";
+  src: local("Segoe UI Light"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff2)
+      format("woff2"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff)
+      format("woff"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.ttf)
+      format("truetype");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: "SegoeUI";
+  src: local("Segoe UI Semilight"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff2)
+      format("woff2"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff)
+      format("woff"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.ttf)
+      format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "SegoeUI";
+  src: local("Segoe UI"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff2)
+      format("woff2"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff)
+      format("woff"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.ttf)
+      format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "SegoeUI";
+  src: local("Segoe UI Bold"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff2)
+      format("woff2"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff)
+      format("woff"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.ttf)
+      format("truetype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "SegoeUI";
+  src: local("Segoe UI Semibold"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff2)
+      format("woff2"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff)
+      format("woff"),
+    url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.ttf)
+      format("truetype");
+  font-weight: 700;
+}
+
+:root {
+  --primary-color: #0f6cbd;
+  --gray-color: #efeef4;
+  --text-color: #333;
+  --border-color: #d1d1d1;
+  --console-bg: #1e1e1e;
+  --console-text: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "SegoeUI", sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
+  background-color: var(--gray-color);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.serial-scale-div {
-    margin-bottom: 20px;
+.main-container {
+  display: flex;
+  width: 95%;
+  height: 90vh;
+  gap: 20px;
+  padding: 20px;
 }
 
-.btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+.console-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.console-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.console-header h2 {
+  font-weight: 600;
+  color: var(--text-color);
 }
 
 #serial-messages-container {
-    width: 75%;
-    height: 400px;
-    border: 1px solid #333;
-    padding: 20px;
-    background-color: #000;
-    color: #f0f0f0; 
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    font-family: 'Courier New', monospace;
+  flex: 1;
+  background-color: var(--console-bg);
+  color: var(--console-text);
+  padding: 20px;
+  overflow-y: auto;
+  font-family: "Fira Code", monospace;
 }
 
 .message {
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    flex-grow: 1;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
-/* Classes pour les couleurs ANSI */
-.ansi-black { color: #000000; }
-.ansi-red { color: #FF0000; }
-.ansi-green { color: #00FF00; }
-.ansi-yellow { color: #FFFF00; }
-.ansi-blue { color: #0000FF; }
-.ansi-magenta { color: #FF00FF; }
-.ansi-cyan { color: #00FFFF; }
-.ansi-white { color: #FFFFFF; }
-.ansi-bright-black { color: #808080; }
-.ansi-bright-red { color: #FF5555; }
-.ansi-bright-green { color: #55FF55; }
-.ansi-bright-yellow { color: #FFFF55; }
-.ansi-bright-blue { color: #5555FF; }
-.ansi-bright-magenta { color: #FF55FF; }
-.ansi-bright-cyan { color: #55FFFF; }
-.ansi-bright-white { color: #FFFFFF; }
+.commands-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.connection-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.commands-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
 .input-container {
-    margin: 20px 0;
-    display: flex;
-    gap: 10px;
-    width: 75%;
+  display: flex;
+  gap: 10px;
 }
 
 #command-input {
-    flex: 1;
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
 }
 
-#send-command {
-    padding: 8px 20px;
-    font-size: 16px;
-    cursor: pointer;
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-/* Styles pour le toggle auto-scroll */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn.secondary {
+  background-color: var(--gray-color);
+  color: var(--text-color);
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
 .toggle-container {
-    position: relative;
-    display: inline-block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .toggle-container input[type="checkbox"] {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    position: absolute;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
 }
 
 .toggle-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
+  font-size: 14px;
+  color: var(--text-color);
+  cursor: pointer;
 }
 
-.toggle-container input[type="checkbox"]:checked + .toggle-btn {
-    background-color: #4CAF50;
-    color: white;
+/* Classes pour les couleurs ANSI */
+.ansi-black {
+  color: #000000;
+}
+.ansi-red {
+  color: #ff0000;
+}
+.ansi-green {
+  color: #00ff00;
+}
+.ansi-yellow {
+  color: #ffff00;
+}
+.ansi-blue {
+  color: #0000ff;
+}
+.ansi-magenta {
+  color: #ff00ff;
+}
+.ansi-cyan {
+  color: #00ffff;
+}
+.ansi-white {
+  color: #ffffff;
+}
+.ansi-bright-black {
+  color: #808080;
+}
+.ansi-bright-red {
+  color: #ff5555;
+}
+.ansi-bright-green {
+  color: #55ff55;
+}
+.ansi-bright-yellow {
+  color: #ffff55;
+}
+.ansi-bright-blue {
+  color: #5555ff;
+}
+.ansi-bright-magenta {
+  color: #ff55ff;
+}
+.ansi-bright-cyan {
+  color: #55ffff;
+}
+.ansi-bright-white {
+  color: #ffffff;
 }
 
-.toggle-container input[type="checkbox"]:focus + .toggle-btn {
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .console-container,
+  .commands-container {
+    width: 100%;
+  }
 }

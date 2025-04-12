@@ -7,27 +7,46 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
-    <div class="serial-scale-div">
-      <button class="btn" id="connect-to-serial">
-        Connect with Serial Device
-      </button>
-    </div>
+    <div class="main-container">
+      <div class="console-container">
+        <div class="console-header">
+          <h2>Console</h2>
+          <div class="toggle-container">
+            <input type="checkbox" id="auto-scroll" checked />
+            <label for="auto-scroll" class="toggle-btn">Auto-scroll</label>
+          </div>
+        </div>
+        <div id="serial-messages-container">
+          <div class="message"></div>
+        </div>
+      </div>
 
-    <div id="serial-messages-container">
-      <div class="message"></div>
-    </div>
+      <div class="commands-container">
+        <div class="connection-section">
+          <button class="btn primary" id="connect-to-serial">
+            Connect with Serial Device
+          </button>
+        </div>
 
-    <div class="input-container">
-      <input type="text" id="command-input" placeholder="Enter command..." />
-      <button class="btn" id="send-command">Send command</button>
-      <button class="btn" id="reset-device">Reset</button>
-      <button class="btn" id="help">Help</button>
-      <button class="btn" id="transmission">Send transmission</button>
-      <button class="btn" id="lora">Lora</button>
+        <div class="commands-section">
+          <div class="input-container">
+            <input
+              type="text"
+              id="command-input"
+              placeholder="Enter command..."
+            />
+            <button class="btn primary" id="send-command">Send command</button>
+          </div>
 
-      <div class="toggle-container">
-        <input type="checkbox" id="auto-scroll" checked />
-        <label for="auto-scroll" class="toggle-btn">Auto-scroll</label>
+          <div class="action-buttons">
+            <button class="btn secondary" id="reset-device">Reset</button>
+            <button class="btn secondary" id="help">Help</button>
+            <button class="btn secondary" id="transmission">
+              Send transmission
+            </button>
+            <button class="btn secondary" id="lora">Lora</button>
+          </div>
+        </div>
       </div>
     </div>
 
