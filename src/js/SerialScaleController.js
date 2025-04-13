@@ -1,5 +1,7 @@
 "use strict";
 
+import { showSnackBar } from "./snackBar.js";
+
 export default class SerialScaleController {
   constructor() {
     this.encoder = new TextEncoder();
@@ -21,7 +23,15 @@ export default class SerialScaleController {
         console.log(signals);
         this.readLoop();
       } catch (err) {
-        console.error("There was an error opening the serial port:", err);
+        if (err.message.includes("open")) {
+          showSnackBar(
+            "The device is already connected to another app or browser window.",
+            null,
+            true
+          );
+        } else {
+          console.error("There was an error opening the serial port:", err);
+        }
       }
     } else {
       console.error(
