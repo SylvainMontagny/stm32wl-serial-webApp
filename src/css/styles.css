@@ -87,19 +87,10 @@ body {
 .main-container {
   display: flex;
   width: 95%;
-  height: 90vh;
+  height: 95vh;
   gap: 20px;
   padding: 20px;
-}
-
-.console-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  align-items: stretch;
 }
 
 .console-header {
@@ -108,6 +99,23 @@ body {
   align-items: center;
   padding: 15px 20px;
   border-bottom: 1px solid var(--border-color);
+}
+
+.console-container {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.commands-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .console-header h2 {
@@ -129,12 +137,6 @@ body {
   white-space: pre-wrap;
 }
 
-.commands-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
 
 .connection-section {
   background-color: white;
@@ -151,6 +153,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  flex: 1;
 }
 
 .input-container {
@@ -261,6 +264,102 @@ body {
 }
 .ansi-bright-white {
   color: #ffffff;
+}
+
+/* LoRa Configuration Section */
+.lora-configuration {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.lora-configuration h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #333;
+}
+
+.input-container {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-container label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.input-container select,
+.input-container input[type="text"] {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-container input[type="range"] {
+  padding: 8px 0;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-container input[type="range"] {
+  width: 100%;
+}
+
+.input-container span {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.btn.primary {
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn.primary:hover {
+  background-color: #0056b3;
+}
+
+#lora-power-value {
+  font-weight: bold;
+  color: black;
+  font-size: 15px;
+}
+
+.lora-preview-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center; 
+}
+
+.command-preview {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media (max-width: 768px) {

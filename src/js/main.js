@@ -41,6 +41,48 @@ document.getElementById("transmission").addEventListener("click", async () => {
   await serialScaleController.writeToPort("t");
 });
 
-document.getElementById("lora").addEventListener("click", async () => {
-  await serialScaleController.writeToPort("lora");
+document.getElementById("lora-power").addEventListener("input", (e) => {
+  document.getElementById("lora-power-value").textContent = e.target.value;
 });
+
+function updateLoraCommandPreview() {
+  const channel = document.getElementById("lora-channel").value;
+  const power = document.getElementById("lora-power").value;
+  const sf = document.getElementById("lora-sf").value;
+  const payload = document.getElementById("lora-payload").value.trim();
+
+  const loraCommand = `LORA=${channel}:${power}:${sf}:${payload}`;
+  const previewInput = document.getElementById("lora-command-preview");
+
+  // Update the preview only if the user hasn't manually modified it
+  if (document.activeElement !== previewInput) {
+    previewInput.value = loraCommand;
+  }
+}
+
+// Attach event listeners to update the preview in real-time
+document
+  .getElementById("lora-channel")
+  .addEventListener("change", updateLoraCommandPreview);
+document
+  .getElementById("lora-power")
+  .addEventListener("input", updateLoraCommandPreview);
+document
+  .getElementById("lora-sf")
+  .addEventListener("change", updateLoraCommandPreview);
+document
+  .getElementById("lora-payload")
+  .addEventListener("input", updateLoraCommandPreview);
+
+document
+  .getElementById("send-lora-command")
+  .addEventListener("click", async () => {
+    const loraCommand = document
+      .getElementById("lora-command-preview")
+      .value.trim();
+    if (loraCommand) {
+      await serialScaleController.writeToPort(loraCommand);
+    } else {
+      alert("Please enter a valid LoRa command.");
+    }
+  });
