@@ -129,12 +129,12 @@ body {
   color: var(--console-text);
   padding: 20px;
   overflow-y: auto;
-  font-family: "Fira Code", monospace;
 }
 
 .message {
   word-wrap: break-word;
   white-space: pre-wrap;
+  font-family: "Courier New", Courier, monospace;
 }
 
 
@@ -264,6 +264,24 @@ body {
 }
 .ansi-bright-white {
   color: #ffffff;
+}
+.ansi-black,
+.ansi-red,
+.ansi-green,
+.ansi-yellow,
+.ansi-blue,
+.ansi-magenta,
+.ansi-cyan,
+.ansi-white,
+.ansi-bright-black,
+.ansi-bright-red,
+.ansi-bright-green,
+.ansi-bright-yellow,
+.ansi-bright-blue,
+.ansi-bright-magenta,
+.ansi-bright-cyan,
+.ansi-bright-white {
+  font-family: "Courier New", Courier, monospace;
 }
 
 /* LoRa Configuration Section */

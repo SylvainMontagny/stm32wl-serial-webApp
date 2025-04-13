@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  stm32wl-webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4150:4150" # Mappe le port 4150 du conteneur au port 4150 de l'hôte
+    environment:
+      - PORT=4150
+    volumes:
+      - .:/usr/src/app # Monte le répertoire local dans le conteneur pour le développement
+    command: ["npm", "start"]
