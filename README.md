@@ -18,7 +18,7 @@ This project is a web application that allows communication with serial devices 
 
 ## Installation and Usage
 
-### Run Locally
+### Run
 
 1. Clone the repository:
 
@@ -30,7 +30,7 @@ This project is a web application that allows communication with serial devices 
 2. Start the application using Docker Compose (no need to run `npm install` manually):
 
    ```bash
-   docker compose up --build
+   docker compose up -d --build
    ```
 
 3. Open your browser and navigate to:
@@ -56,45 +56,6 @@ If you prefer to run the application without Docker, you can:
    ```
 
 2. Open the `index.html` file directly in a browser that supports the Web Serial API.
-
-## Deployment with Docker
-
-### Prerequisites
-
-- [Docker](https://www.docker.com/) installed on your machine.
-- [Docker Compose](https://docs.docker.com/compose/) installed.
-
-### Steps
-
-1. Build and start the container using Docker Compose:
-
-   ```bash
-   docker compose up --build
-   ```
-
-2. Access the application in your browser at:
-
-   ```
-   http://localhost:4150
-   ```
-
-   - If deploying on a remote server, replace `localhost` with the server's IP address or domain name (e.g., `http://your-server-ip:4150`).
-
-3. To stop the container, use the following command:
-
-   ```bash
-   docker compose down
-   ```
-
-### Production Deployment
-
-To deploy the application in production, you can use the generated Docker image. Here's an example command to run the application in detached mode:
-
-```bash
-docker run -d -p 4150:4150 --name stm32wl-webapp stm32wl-webapp:latest
-```
-
-- Replace `localhost` with the server's IP address or domain name when accessing the application in production.
 
 ## Contributing
 
