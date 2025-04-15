@@ -86,3 +86,26 @@ document
       alert("Please enter a valid LoRa command.");
     }
   });
+
+// Toggle visibility of panels
+const inputContainer = document.querySelector(".input-container-cmd");
+const loraTransmissionPanel = document.querySelector(".commands-section");
+
+document.getElementById("enter-send-command").addEventListener("click", () => {
+  inputContainer.classList.toggle("hidden");
+});
+
+document
+  .getElementById("enter-lora-mode")
+  .addEventListener("click", async () => {
+    const loraModeCheckbox = document.getElementById("enter-lora-mode");
+    const loraModeLabel = document.getElementById("enter-lora-mode-label");
+    if (!loraModeCheckbox.checked) {
+      await serialScaleController.writeToPort("r");
+      loraModeLabel.textContent = "Enter LoRa Mode";
+    } else {
+      await serialScaleController.writeToPort("lora");
+      loraModeLabel.textContent = "Exit LoRa Mode";
+    }
+    loraTransmissionPanel.classList.toggle("hidden");
+  });

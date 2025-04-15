@@ -22,32 +22,55 @@
       </div>
 
       <div class="commands-container">
-        <div class="connection-section">
-          <button class="btn primary" id="connect-to-serial">
-            Connect with Serial Device
-          </button>
-        </div>
-
-        <div class="commands-section">
-          <div class="input-container">
-            <input
-              type="text"
-              id="command-input"
-              placeholder="Enter command..."
-            />
-            <button class="btn primary" id="send-command">Send command</button>
-          </div>
-
-          <div class="action-buttons">
-            <button class="btn secondary" id="reset-device">Reset</button>
-            <button class="btn secondary" id="help">Help</button>
-            <button class="btn secondary" id="transmission">
-              Send transmission
+        <div class="action-buttons">
+          <div class="connection-section">
+            <button class="btn primary" id="connect-to-serial">
+              Connect with Serial Device
             </button>
           </div>
 
+          <div class="buttons-section">
+            <div class="common-commands">
+              <button class="btn secondary" id="transmission">
+                Force Transmission
+              </button>
+              <button class="btn secondary" id="reset-device">Reset</button>
+              <button class="btn secondary" id="help">Help</button>
+            </div>
+
+            <div class="hidden-buttons">
+              <div class="toggle-container-cmd">
+                <input type="checkbox" id="enter-lora-mode" />
+                <label
+                  for="enter-lora-mode"
+                  class="toggle-btn-cmd"
+                  id="enter-lora-mode-label"
+                  >Enter LoRa Mode</label
+                >
+              </div>
+
+              <div class="toggle-container-cmd">
+                <input type="checkbox" id="enter-send-command" />
+                <label for="enter-send-command" class="toggle-btn-cmd"
+                  >Send Command</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-container-cmd hidden">
+          <input
+            type="text"
+            id="command-input"
+            placeholder="Enter command..."
+          />
+          <button class="btn primary" id="send-command">Send</button>
+        </div>
+
+        <div class="commands-section hidden">
           <div class="lora-configuration">
-            <h3>LoRa Configuration</h3>
+            <h3>LoRa Transmission</h3>
             <div class="input-container">
               <label for="lora-channel">Channel : </label>
               <select id="lora-channel">
@@ -87,6 +110,7 @@
                 type="text"
                 id="lora-payload"
                 placeholder="Hex or Base64"
+                value="01020304"
               />
             </div>
 
@@ -98,7 +122,7 @@
                 type="text"
                 id="lora-command-preview"
                 class="command-preview"
-                value="LORA=868100000:0:7:"
+                value="LORA=868100000:0:7:01020304"
               />
             </div>
           </div>
