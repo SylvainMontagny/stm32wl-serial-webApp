@@ -1,7 +1,5 @@
-version: "3.8"
-
 services:
-  stm32wl-webapp:
+  stm32wl-serial-webapp:
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,3 +10,9 @@ services:
     volumes:
       - .:/usr/src/app # Monte le répertoire local dans le conteneur pour le développement
     command: ["npm", "start"]
+    networks:
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external: true
