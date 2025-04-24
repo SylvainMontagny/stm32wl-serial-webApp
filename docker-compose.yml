@@ -1,11 +1,7 @@
 services:
   stm32wl-serial-webapp:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
       - "4150:4150"
     environment:
       - PORT=4150
-    volumes:
-      - .:/usr/src/app
