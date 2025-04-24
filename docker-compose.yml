@@ -4,14 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4150:4150" # Mappe le port 4150 du conteneur au port 4150 de l'hôte
+      - "4150:4150"
     environment:
       - PORT=4150
     volumes:
-      - .:/usr/src/app # Monte le répertoire local dans le conteneur pour le développement
-    networks:
-      - reverse-proxy
-
-networks:
-  reverse-proxy:
-    external: true
+      - .:/usr/src/app
