@@ -91,25 +91,32 @@ document
 const inputContainer = document.querySelector(".input-container-cmd");
 const loraTransmissionPanel = document.querySelector(".commands-section");
 
-document.getElementById("enter-send-command").addEventListener("click", (e) => {
-  const buttonContainer = e.target.closest(".toggle-container-cmd");
-  const isActive = buttonContainer.classList.toggle("active");
-  inputContainer.classList.toggle("hidden", !isActive);
-});
-
-document
-  .getElementById("enter-lora-mode")
-  .addEventListener("click", async (e) => {
-    const buttonContainer = e.target.closest(".toggle-container-cmd");
-    const isActive = buttonContainer.classList.toggle("active");
-    const loraModeLabel = document.getElementById("enter-lora-mode-label");
-
-    if (!isActive) {
-      await serialScaleController.writeToPort("r");
-      loraModeLabel.textContent = "Enter LoRa Mode";
-    } else {
-      await serialScaleController.writeToPort("lora");
-      loraModeLabel.textContent = "Exit LoRa Mode";
+document.querySelectorAll(".toggle-container-cmd").forEach((container) => {
+  container.addEventListener("click", async (e) => {
+    // Empêche le comportement par défaut si le clic vient du label
+    if (e.target.tagName === "LABEL") {
+      e.preventDefault();
     }
-    loraTransmissionPanel.classList.toggle("hidden", !isActive);
+
+    const isLoraMode = container.id === "enter-lora-mode-container";
+    const checkbox = container.querySelector("input[type='checkbox']");
+    const isActive = container.classList.toggle("active");
+
+    // Met à jour l'état de la checkbox
+    checkbox.checked = isActive;
+
+    if (isLoraMode) {
+      const loraModeLabel = document.getElementById("enter-lora-mode-label");
+      if (!isActive) {
+        await serialScaleController.writeToPort("r");
+        loraModeLabel.textContent = "Enter LoRa Mode";
+      } else {
+        await serialScaleController.writeToPort("lora");
+        loraModeLabel.textContent = "Exit LoRa Mode";
+      }
+      loraTransmissionPanel.classList.toggle("hidden", !isActive);
+    } else {
+      inputContainer.classList.toggle("hidden", !isActive);
+    }
   });
+});
