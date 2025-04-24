@@ -91,21 +91,25 @@ document
 const inputContainer = document.querySelector(".input-container-cmd");
 const loraTransmissionPanel = document.querySelector(".commands-section");
 
-document.getElementById("enter-send-command").addEventListener("click", () => {
-  inputContainer.classList.toggle("hidden");
+document.getElementById("enter-send-command").addEventListener("click", (e) => {
+  const buttonContainer = e.target.closest(".toggle-container-cmd");
+  const isActive = buttonContainer.classList.toggle("active");
+  inputContainer.classList.toggle("hidden", !isActive);
 });
 
 document
   .getElementById("enter-lora-mode")
-  .addEventListener("click", async () => {
-    const loraModeCheckbox = document.getElementById("enter-lora-mode");
+  .addEventListener("click", async (e) => {
+    const buttonContainer = e.target.closest(".toggle-container-cmd");
+    const isActive = buttonContainer.classList.toggle("active");
     const loraModeLabel = document.getElementById("enter-lora-mode-label");
-    if (!loraModeCheckbox.checked) {
+
+    if (!isActive) {
       await serialScaleController.writeToPort("r");
       loraModeLabel.textContent = "Enter LoRa Mode";
     } else {
       await serialScaleController.writeToPort("lora");
       loraModeLabel.textContent = "Exit LoRa Mode";
     }
-    loraTransmissionPanel.classList.toggle("hidden");
+    loraTransmissionPanel.classList.toggle("hidden", !isActive);
   });
