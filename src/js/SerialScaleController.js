@@ -12,11 +12,11 @@ export default class SerialScaleController {
     this.currentColorClass = null;
   }
 
-  async init() {
+  async init(baudRate = 115200) {
     if ("serial" in navigator) {
       try {
         const port = await navigator.serial.requestPort();
-        await port.open({ baudRate: 115200 });
+        await port.open({ baudRate: parseInt(baudRate) });
         this.port = port;
         this.reader = port.readable.getReader();
         let signals = await port.getSignals();
@@ -25,17 +25,17 @@ export default class SerialScaleController {
       } catch (err) {
         if (err.message.includes("open")) {
           showSnackBar(
-            "The device is already connected to another app or browser window.",
+            "Le périphérique est déjà connecté à une autre application ou fenêtre du navigateur.",
             null,
             true
           );
         } else {
-          console.error("There was an error opening the serial port:", err);
+          console.error("Erreur lors de l'ouverture du port série:", err);
         }
       }
     } else {
       console.error(
-        "Web serial doesn't seem to be enabled in your browser. Try enabling it by visiting:"
+        "Le Web Serial ne semble pas être activé dans votre navigateur. Essayez de l'activer en visitant:"
       );
       console.error(
         "chrome://flags/#enable-experimental-web-platform-features"

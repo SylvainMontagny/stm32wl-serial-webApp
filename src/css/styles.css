@@ -101,6 +101,20 @@ body {
   border-bottom: 1px solid var(--border-color);
 }
 
+.serial-connection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#baudrate-select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: white;
+}
+
 .console-container {
   flex: 1; 
   display: flex;

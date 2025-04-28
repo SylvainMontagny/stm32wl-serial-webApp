@@ -4,11 +4,13 @@ import SerialScaleController from "./SerialScaleController.js";
 
 const serialScaleController = new SerialScaleController();
 const connect = document.getElementById("connect-to-serial");
+const baudrateSelect = document.getElementById("baudrate-select");
 const commandInput = document.getElementById("command-input");
 const sendCommand = document.getElementById("send-command");
 
 connect.addEventListener("pointerdown", () => {
-  serialScaleController.init();
+  const selectedBaudrate = baudrateSelect.value;
+  serialScaleController.init(selectedBaudrate);
 });
 
 sendCommand.addEventListener("click", async () => {
