@@ -107,6 +107,27 @@ body {
   gap: 10px;
 }
 
+.reload-button {
+  margin-left: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.reload-button:hover {
+  background-color: #45a049;
+}
+
+.reload-button i {
+  margin-right: 6px;
+}
+
 #baudrate-select {
   padding: 8px;
   font-size: 14px;

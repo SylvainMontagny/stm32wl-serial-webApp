@@ -8,6 +8,24 @@ const baudrateSelect = document.getElementById("baudrate-select");
 const commandInput = document.getElementById("command-input");
 const sendCommand = document.getElementById("send-command");
 
+window.reloadPageWithCacheClear = function () {
+  if (window.caches) {
+    caches.keys().then(function (names) {
+      for (let name of names) {
+        caches.delete(name);
+      }
+    });
+  }
+  window.location.reload(true);
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const reloadButton = document.getElementById("reload-button");
+  if (reloadButton) {
+    reloadButton.addEventListener("click", window.reloadPageWithCacheClear);
+  }
+});
+
 connect.addEventListener("pointerdown", () => {
   const selectedBaudrate = baudrateSelect.value;
   serialScaleController.init(selectedBaudrate);
