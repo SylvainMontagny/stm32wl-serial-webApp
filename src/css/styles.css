@@ -87,11 +87,10 @@ body {
 .main-container {
   display: flex;
   width: 100%;
-  max-width: 1600px; /* Limitation de la largeur maximale */
-  height: 100vh; /* Réduction de la hauteur */
+  height: 100vh; 
   position: relative;
   overflow: hidden;
-  margin: auto; /* Centrage */
+  margin: auto;
 }
 
 .page-container {
@@ -99,17 +98,17 @@ body {
   flex-direction: column;
   width: 100%;
   position: relative;
-  padding: 15px; /* Réduction du padding */
+  padding: 15px;  
   padding-left: 10%;
   padding-right: 10%;
-  transition: width 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 .console-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px; /* Réduction du padding */
+  padding: 10px 15px;  
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -175,7 +174,7 @@ body {
   flex: 1;
   background-color: var(--console-bg);
   color: var(--console-text);
-  padding: 15px; /* Réduction du padding */
+  padding: 15px;  
   overflow-y: auto;
   max-height: auto; /* Limitation de la hauteur */
 }
@@ -188,12 +187,12 @@ body {
 
 .action-buttons {
   background-color: white;
-  padding: 15px; /* Réduction du padding */
+  padding: 15px;  
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Réduction du gap */
+  gap: 15px;  
 }
 
 .commands-section-panel {
@@ -201,57 +200,45 @@ body {
   top: 0;
   right: -35%;
   width: 35%;
-  height: 100vh; /* Ajustement pour correspondre à la hauteur principale */
+  height: 100vh;
   background-color: white;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   transition: right 0.3s ease-in-out;
   z-index: 10;
-  padding: 15px; /* Réduction du padding */
+  padding: 15px;  
   overflow-y: auto;
 }
 
 .commands-section {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Réduction du gap */
+  gap: 15px;  
 }
 
 .panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px; /* Réduction de la marge */
-  padding-bottom: 8px; /* Réduction du padding */
+  margin-bottom: 12px;  
+  padding-bottom: 8px;  
   border-bottom: 1px solid var(--border-color);
-}
-
-.close-panel-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  color: #666;
-}
-
-.close-panel-btn:hover {
-  color: #333;
 }
 
 .common-commands {
   display: flex;
-  gap: 8px; /* Réduction du gap */
+  gap: 8px;  
   flex-wrap: wrap;
 }
 
 .input-container,
 .input-container-cmd {
   display: flex;
-  gap: 8px; /* Réduction du gap */
+  gap: 8px;  
 }
 
 #command-input {
   flex: 1;
-  padding: 8px; /* Réduction du padding */
+  padding: 8px;  
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
@@ -260,11 +247,11 @@ body {
 .action-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; /* Réduction du gap */
+  gap: 8px;  
 }
 
 .btn {
-  padding: 8px 16px; /* Réduction du padding */
+  padding: 8px 16px;  
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -290,12 +277,12 @@ body {
 .toggle-container-cmd {
   display: flex;
   align-items: center;
-  gap: 8px; /* Réduction du gap */
+  gap: 8px;  
 }
 
 .toggle-container input[type="checkbox"] {
-  width: 16px; /* Réduction de la taille */
-  height: 16px; /* Réduction de la taille */
+  width: 16px;  
+  height: 16px;  
   cursor: pointer;
 }
 
@@ -324,7 +311,7 @@ body {
 }
 
 .toggle-container-cmd {
-  padding: 8px 16px; /* Réduction du padding */
+  padding: 8px 16px;  
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -418,22 +405,101 @@ body {
   font-family: "Courier New", Courier, monospace;
 }
 
+/* Panel Selector Styles */
+.panel-selector {
+  position: relative; 
+  width: 100%;
+  cursor: pointer;
+  user-select: none;
+  overflow: visible;
+}
+
+.selected-panel {
+  background-color: white;
+  color: black;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 10px 10px 0 0;
+}
+
+.panel-selector.open .selected-panel {
+  background-color: var(--gray-color);
+  color: black;
+  border-radius: 10px 10px 0 0;
+}
+
+.selected-panel:after {
+  content: '\f107';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-left: 10px;
+  transition: transform 0.3s;
+  border-radius: 0 0 10px 10px;
+}
+
+.panel-selector.open .selected-panel:after {
+  transform: rotate(180deg);
+}
+
+.panel-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--gray-color); 
+  border-radius: 0 0 10px 10px;
+  z-index: 100;
+  display: none;
+}
+
+.panel-selector.open .panel-dropdown {
+  display: block;
+}
+
+.panel-option {
+  color: black;
+  padding: 10px 15px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.panel-option:hover {
+  background-color: #dedde3;
+}
+
+.panel-option.hidden {
+  display: none !important; 
+}
+
+.panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.panel-content.hidden {
+  display: none;
+}
+
 /* LoRa Configuration Section */
 .lora-configuration {
-  padding: 12px; /* Réduction du padding */
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
 }
 
 .lora-configuration h3 {
-  margin-bottom: 12px; /* Réduction de la marge */
-  font-size: 16px; /* Réduction de la taille */
+  margin-bottom: 12px; 
+  font-size: 16px;
   color: #333;
 }
 
 .input-container {
-  margin-bottom: 12px; /* Réduction de la marge */
+  margin-bottom: 12px; 
   display: flex;
   flex-direction: column;
 }
@@ -443,20 +509,20 @@ body {
   padding: 12px;
   /* background-color: #f8f8f8; */
   border-top: 1px solid var(--border-color);
-  gap: 8px; /* Réduction du gap */
+  gap: 8px; 
 }
 
 .input-container label,
 .input-container-cmd label {
-  font-size: 13px; /* Réduction de la taille */
-  margin-bottom: 4px; /* Réduction de la marge */
+  font-size: 13px; 
+  margin-bottom: 4px; 
   color: #555;
 }
 
 .input-container select,
 .input-container input[type="text"] {
-  padding: 7px; /* Réduction du padding */
-  font-size: 13px; /* Réduction de la taille */
+  padding: 7px;
+  font-size: 13px; 
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -464,8 +530,8 @@ body {
 }
 
 .input-container-cmd input[type="text"] {
-  padding: 7px; /* Réduction du padding */
-  font-size: 13px; /* Réduction de la taille */
+  padding: 7px; 
+  font-size: 13px;  
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -474,8 +540,8 @@ body {
 }
 
 .input-container input[type="range"] {
-  padding: 7px 0; /* Réduction du padding */
-  font-size: 13px; /* Réduction de la taille */
+  padding: 7px 0;  
+  font-size: 13px;  
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -488,14 +554,14 @@ body {
 
 .input-container span,
 .input-container-cmd span {
-  margin-top: 4px; /* Réduction de la marge */
+  margin-top: 4px;  
   font-size: 12px;
   color: #666;
 }
 
 .btn.primary {
-  padding: 8px 14px; /* Réduction du padding */
-  font-size: 13px; /* Réduction de la taille */
+  padding: 8px 14px;  
+  font-size: 13px;  
   color: #fff;
   background-color: #007bff;
   border: none;
@@ -510,20 +576,20 @@ body {
 #lora-power-value {
   font-weight: bold;
   color: black;
-  font-size: 14px; /* Réduction de la taille */
+  font-size: 14px;  
 }
 
 .lora-preview-container {
   display: flex;
   flex-direction: row;
-  gap: 8px; /* Réduction du gap */
+  gap: 8px;  
   align-items: center;
 }
 
 .command-preview {
   flex-grow: 1;
-  padding: 8px; /* Réduction du padding */
-  font-size: 13px; /* Réduction de la taille */
+  padding: 8px;  
+  font-size: 13px;  
   color: #333;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
@@ -535,7 +601,7 @@ body {
 
 .lora-toggle-btn {
   position: fixed;
-  top: 50%;
+  top: 10%;
   right: 0;
   transform: translateY(-50%);
   background-color: var(--primary-color);
@@ -544,14 +610,14 @@ body {
   border-radius: 8px 0 0 8px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: right 0.3s ease-in-out, background-color 0.3s;
   z-index: 9;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
   border: none;
-  min-height: 50px;
+  min-height: 100px;
   min-width: 35px;
 }
 
@@ -560,7 +626,7 @@ body {
 }
 
 .lora-toggle-btn i {
-  margin-right: 6px; /* Réduction de la marge */
+  margin-right: 6px;  
 }
 
 @media (max-width: 768px) {
@@ -576,7 +642,7 @@ body {
 
   .page-container {
     width: 100% !important;
-    padding: 10px; /* Réduction supplémentaire du padding pour mobile */
+    padding: 10px; 
   }
 
   .commands-section-panel {
@@ -592,18 +658,18 @@ body {
 /* Snackbar Styles */
 #snackbar {
   visibility: hidden;
-  min-width: 220px; /* Réduction de la largeur */
+  min-width: 220px;  
   background-color: white;
   color: black;
   text-align: center;
   box-shadow: #d1d1d1 0px 0px 5px;
   border-radius: 2px;
-  padding: 12px; /* Réduction du padding */
+  padding: 12px;  
   position: fixed;
   z-index: 1;
-  left: 20px; /* Déplacé légèrement */
-  bottom: 20px; /* Déplacé légèrement */
-  font-size: 15px; /* Réduction de la taille */
+  left: 20px;  
+  bottom: 20px;  
+  font-size: 15px;  
 }
 
 #snackbar.auto-close {
@@ -619,8 +685,8 @@ body {
 }
 
 #snackbar button {
-  margin-left: 8px; /* Réduction de la marge */
-  padding: 6px 12px; /* Réduction du padding */
+  margin-left: 8px;  
+  padding: 6px 12px;  
   background-color: var(--primary-color);
   color: #fff;
   border: none;
@@ -634,7 +700,7 @@ body {
     opacity: 0;
   }
   to {
-    bottom: 20px; /* Ajusté pour correspondre à la position */
+    bottom: 20px;  
     opacity: 1;
   }
 }
@@ -645,14 +711,14 @@ body {
     opacity: 0;
   }
   to {
-    bottom: 20px; /* Ajusté pour correspondre à la position */
+    bottom: 20px;  
     opacity: 1;
   }
 }
 
 @-webkit-keyframes fadeout {
   from {
-    bottom: 20px; /* Ajusté pour correspondre à la position */
+    bottom: 20px;  
     opacity: 1;
   }
   to {
@@ -663,7 +729,7 @@ body {
 
 @keyframes fadeout {
   from {
-    bottom: 20px; /* Ajusté pour correspondre à la position */
+    bottom: 20px;  
     opacity: 1;
   }
   to {

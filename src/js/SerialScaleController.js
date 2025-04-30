@@ -85,68 +85,86 @@ export default class SerialScaleController {
   }
 
   parseAnsiCodes(text) {
+    // Nettoyage des codes non liés aux couleurs
     text = text.replace(/\x1b(?!\[)/g, "");
     text = text.replace(/\x1b\[\d+;\d+H/g, "");
     text = text.replace(/\x1b\[\d+J/g, "");
 
     let result = "";
-    let segments = text.split(/(\x1b\[\d+m)/);
-    let currentSpanOpen = false;
 
-    if (this.currentColorClass && !text.startsWith("\x1b[")) {
+    // Support des formats ESP32 [0;32m et des formats standard \x1b[32m
+    const ansiRegex = /(?:\x1b\[|\[)(\d+)(?:;(\d+))?m/g;
+    let lastIndex = 0;
+    let match;
+
+    // Si une couleur est déjà active au début du texte
+    if (this.currentColorClass && !text.match(/^(?:\x1b\[|\[)\d+(?:;\d+)?m/)) {
       result += `<span class="${this.currentColorClass}">`;
-      currentSpanOpen = true;
+    } else {
+      this.currentColorClass = null;
     }
 
-    segments.forEach((segment) => {
-      if (segment.match(/\x1b\[\d+m/)) {
-        const code = parseInt(segment.match(/\x1b\[(\d+)m/)[1], 10);
-
-        if (currentSpanOpen) {
-          result += "</span>";
-          currentSpanOpen = false;
+    // Traitement de chaque code couleur dans le texte
+    while ((match = ansiRegex.exec(text)) !== null) {
+      // Ajouter le texte entre les codes
+      const textBefore = text.substring(lastIndex, match.index);
+      if (textBefore) {
+        if (this.currentColorClass) {
+          result += textBefore;
+        } else {
+          result += textBefore;
         }
-
-        if (code === 0) {
-          this.currentColorClass = null;
-          return;
-        }
-
-        if (code >= 30 && code <= 37) {
-          const colors = [
-            "black",
-            "red",
-            "green",
-            "yellow",
-            "blue",
-            "magenta",
-            "cyan",
-            "white",
-          ];
-          const colorClass = `ansi-${colors[code - 30]}`;
-          this.currentColorClass = colorClass;
-          result += `<span class="${colorClass}">`;
-          currentSpanOpen = true;
-        } else if (code >= 90 && code <= 97) {
-          const colors = [
-            "black",
-            "red",
-            "green",
-            "yellow",
-            "blue",
-            "magenta",
-            "cyan",
-            "white",
-          ];
-          const colorClass = `ansi-bright-${colors[code - 90]}`;
-          this.currentColorClass = colorClass;
-          result += `<span class="${colorClass}">`;
-          currentSpanOpen = true;
-        }
-      } else {
-        result += segment;
       }
-    });
+
+      // Fermer la balise span précédente si une existe
+      if (this.currentColorClass) {
+        result += "</span>";
+      }
+
+      // Analyser le code
+      const primaryCode = parseInt(match[1], 10);
+      const secondaryCode = match[2] ? parseInt(match[2], 10) : null;
+
+      // Déterminer la couleur
+      const getColorClass = (code) => {
+        const colors = [
+          "black",
+          "red",
+          "green",
+          "yellow",
+          "blue",
+          "magenta",
+          "cyan",
+          "white",
+        ];
+        if (code >= 30 && code <= 37) {
+          return `ansi-${colors[code - 30]}`;
+        } else if (code >= 90 && code <= 97) {
+          return `ansi-bright-${colors[code - 90]}`;
+        }
+        return null;
+      };
+
+      // Appliquer la couleur
+      let colorClass = getColorClass(primaryCode);
+      if (!colorClass && secondaryCode) {
+        colorClass = getColorClass(secondaryCode);
+      }
+
+      if (colorClass) {
+        this.currentColorClass = colorClass;
+        result += `<span class="${colorClass}">`;
+      }
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    // Ajouter le texte restant
+    if (lastIndex < text.length) {
+      const remainingText = text.substring(lastIndex);
+      result += remainingText;
+    }
+
     return result;
   }
 

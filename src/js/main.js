@@ -115,16 +115,10 @@ function initLoraPanel() {
     "commands-section-panel"
   );
   const toggleLoraPanel = document.getElementById("toggle-lora-panel");
-  const closePanel = document.getElementById("close-panel");
   let isPanelOpen = false;
 
   // Vérifier que tous les éléments sont présents
-  if (
-    !pageContainer ||
-    !commandsSectionPanel ||
-    !toggleLoraPanel ||
-    !closePanel
-  ) {
+  if (!pageContainer || !commandsSectionPanel || !toggleLoraPanel) {
     console.error("Éléments manquants pour le panneau LoRa");
     return;
   }
@@ -135,8 +129,9 @@ function initLoraPanel() {
 
   // Fonction pour basculer le panneau
   function togglePanel() {
+    // Animation plus fluide pour le panneau et le bouton
     if (!isPanelOpen) {
-      // Afficher le panneau
+      // Ouvrir le panneau
       commandsSectionPanel.style.right = "0";
       pageContainer.style.width = "65%";
       pageContainer.style.paddingLeft = "5%";
@@ -146,7 +141,7 @@ function initLoraPanel() {
       // Activer le mode LoRa
       serialScaleController.writeToPort("lora");
     } else {
-      // Masquer le panneau
+      // Fermer le panneau
       commandsSectionPanel.style.right = "-35%";
       pageContainer.style.width = "100%";
       pageContainer.style.paddingLeft = "10%";
@@ -161,7 +156,6 @@ function initLoraPanel() {
 
   // Écouteurs d'événements pour l'ouverture/fermeture du panneau
   toggleLoraPanel.addEventListener("click", togglePanel);
-  closePanel.addEventListener("click", togglePanel);
 
   // Adaptation pour le responsive
   window.addEventListener("resize", function () {
@@ -174,42 +168,72 @@ function initLoraPanel() {
 
   // Initialiser la prévisualisation de commande LoRa
   updateLoraCommandPreview();
+
+  // Initialiser le sélecteur de panel
+  initPanelSelector();
 }
 
-// Suppression du code précédent pour le toggle des panels
-// Le code suivant est maintenant remplacé par la fonction initLoraPanel()
-/*
-// Toggle visibility of panels
-const inputContainer = document.querySelector(".input-container-cmd");
-const loraTransmissionPanel = document.querySelector(".commands-section");
+// Fonction pour gérer le sélecteur de panels
+function initPanelSelector() {
+  const selectedPanel = document.getElementById("selected-panel");
+  const panelDropdown = document.getElementById("panel-dropdown");
+  const panelSelector = document.querySelector(".panel-selector");
+  const panelOptions = document.querySelectorAll(".panel-option");
 
-document.querySelectorAll(".toggle-container-cmd").forEach((container) => {
-  container.addEventListener("click", async (e) => {
-    // Empêche le comportement par défaut si le clic vient du label
-    if (e.target.tagName === "LABEL") {
-      e.preventDefault();
-    }
+  // Fonction pour mettre à jour la visibilité des options
+  function updatePanelOptions() {
+    // Récupérer le texte actuellement sélectionné
+    const currentText = selectedPanel.textContent.trim();
 
-    const isLoraMode = container.id === "enter-lora-mode-container";
-    const checkbox = container.querySelector("input[type='checkbox']");
-    const isActive = container.classList.toggle("active");
-
-    // Met à jour l'état de la checkbox
-    checkbox.checked = isActive;
-
-    if (isLoraMode) {
-      const loraModeLabel = document.getElementById("enter-lora-mode-label");
-      if (!isActive) {
-        await serialScaleController.writeToPort("r");
-        loraModeLabel.textContent = "Enter LoRa Mode";
-      } else {
-        await serialScaleController.writeToPort("lora");
-        loraModeLabel.textContent = "Exit LoRa Mode";
+    // Afficher toutes les options puis cacher celle qui correspond à la sélection actuelle
+    panelOptions.forEach((opt) => {
+      opt.classList.remove("hidden");
+      if (opt.textContent.trim() === currentText) {
+        opt.classList.add("hidden");
       }
-      loraTransmissionPanel.classList.toggle("hidden", !isActive);
-    } else {
-      inputContainer.classList.toggle("hidden", !isActive);
+    });
+  }
+
+  // Appliquer au chargement pour cacher l'option actuellement sélectionnée
+  updatePanelOptions();
+
+  // Ouvrir/fermer le dropdown au clic
+  selectedPanel.addEventListener("click", () => {
+    panelSelector.classList.toggle("open");
+
+    // Si le panel est ouvert, on s'assure que les bonnes options sont visibles
+    if (panelSelector.classList.contains("open")) {
+      updatePanelOptions();
     }
   });
-});
-*/
+
+  // Fermer le dropdown si on clique ailleurs
+  document.addEventListener("click", (event) => {
+    if (!panelSelector.contains(event.target)) {
+      panelSelector.classList.remove("open");
+    }
+  });
+
+  // Gestion de la sélection d'un panel
+  panelOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+      // Mettre à jour le texte sélectionné
+      selectedPanel.textContent = option.textContent;
+
+      // Fermer le dropdown
+      panelSelector.classList.remove("open");
+
+      // Masquer tous les panels
+      document.querySelectorAll(".panel-content").forEach((panel) => {
+        panel.classList.add("hidden");
+      });
+
+      // Afficher le panel sélectionné
+      const panelId = option.getAttribute("data-panel") + "-panel";
+      document.getElementById(panelId).classList.remove("hidden");
+
+      // Mettre à jour les options visibles
+      updatePanelOptions();
+    });
+  });
+}
