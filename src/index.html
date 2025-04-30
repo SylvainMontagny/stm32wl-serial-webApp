@@ -12,87 +12,76 @@
   </head>
   <body>
     <div class="main-container">
-      <div class="console-container">
-        <div class="console-header">
-          <h2>Console</h2>
-          <div class="serial-connection">
-            <button class="btn primary" id="connect-to-serial">
-              Connect Serial Device
+      <div class="page-container" id="page-container">
+        <div class="console-container">
+          <div class="console-header">
+            <h2>Console</h2>
+            <div class="serial-connection">
+              <button class="btn primary" id="connect-to-serial">
+                Connect Serial Device
+              </button>
+              <select id="baudrate-select">
+                <option value="9600">9600</option>
+                <option value="19200">19200</option>
+                <option value="38400">38400</option>
+                <option value="57600">57600</option>
+                <option value="115200" selected>115200</option>
+                <option value="230400">230400</option>
+                <option value="460800">460800</option>
+                <option value="921600">921600</option>
+              </select>
+            </div>
+            <button
+              id="reload-button"
+              class="reload-button"
+              onclick="reloadPageWithCacheClear()"
+            >
+              <i class="fas fa-sync-alt"></i> Restart Console
             </button>
-            <select id="baudrate-select">
-              <option value="9600">9600</option>
-              <option value="19200">19200</option>
-              <option value="38400">38400</option>
-              <option value="57600">57600</option>
-              <option value="115200" selected>115200</option>
-              <option value="230400">230400</option>
-              <option value="460800">460800</option>
-              <option value="921600">921600</option>
-            </select>
+            <div class="toggle-container">
+              <input type="checkbox" id="auto-scroll" checked />
+              <label for="auto-scroll" class="toggle-btn">Auto-scroll</label>
+            </div>
           </div>
-          <button
-            id="reload-button"
-            class="reload-button"
-            onclick="reloadPageWithCacheClear()"
-          >
-            <i class="fas fa-sync-alt"></i> Restart Console
-          </button>
-          <div class="toggle-container">
-            <input type="checkbox" id="auto-scroll" checked />
-            <label for="auto-scroll" class="toggle-btn">Auto-scroll</label>
+          <div id="serial-messages-container">
+            <div class="message"></div>
+          </div>
+
+          <!-- Send Command déplacé ici, sous la console -->
+          <div class="input-container-cmd">
+            <input
+              type="text"
+              id="command-input"
+              placeholder="Enter command..."
+            />
+            <button class="btn primary" id="send-command">Send</button>
           </div>
         </div>
-        <div id="serial-messages-container">
-          <div class="message"></div>
+
+        <!-- Bouton LoRa Mode en bas à droite -->
+        <div class="lora-toggle-btn" id="toggle-lora-panel">
+          <i class="fas fa-broadcast-tower"></i> Enter LoRa Mode
         </div>
       </div>
 
-      <div class="commands-container">
-        <div class="action-buttons">
-          <div class="buttons-section">
-            <div class="common-commands">
-              <button class="btn secondary" id="transmission">
-                Force Transmission
-              </button>
-              <button class="btn secondary" id="reset-device">Reset</button>
-              <button class="btn secondary" id="help">Help</button>
-            </div>
-
-            <div class="hidden-buttons">
-              <div class="toggle-container-cmd" id="enter-lora-mode-container">
-                <input type="checkbox" id="enter-lora-mode" />
-                <label
-                  for="enter-lora-mode"
-                  class="toggle-btn-cmd"
-                  id="enter-lora-mode-label"
-                >
-                  Enter LoRa Mode
-                </label>
-              </div>
-
-              <div
-                class="toggle-container-cmd"
-                id="enter-send-command-container"
-              >
-                <input type="checkbox" id="enter-send-command" />
-                <label for="enter-send-command" class="toggle-btn-cmd">
-                  Send Command
-                </label>
-              </div>
-            </div>
+      <!-- Panel commands-section qui arrive de la droite -->
+      <div class="commands-section-panel" id="commands-section-panel">
+        <div class="commands-section">
+          <div class="panel-header">
+            <h3>LoRa Control Panel</h3>
+            <button class="close-panel-btn" id="close-panel">
+              <i class="fas fa-times"></i>
+            </button>
           </div>
-        </div>
 
-        <div class="input-container-cmd hidden">
-          <input
-            type="text"
-            id="command-input"
-            placeholder="Enter command..."
-          />
-          <button class="btn primary" id="send-command">Send</button>
-        </div>
+          <div class="common-commands">
+            <button class="btn secondary" id="transmission">
+              Force Transmission
+            </button>
+            <button class="btn secondary" id="reset-device">Reset</button>
+            <button class="btn secondary" id="help">Help</button>
+          </div>
 
-        <div class="commands-section hidden">
           <div class="lora-configuration">
             <h3>LoRa Transmission</h3>
             <div class="input-container">

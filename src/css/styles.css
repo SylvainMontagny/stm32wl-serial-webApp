@@ -86,18 +86,30 @@ body {
 
 .main-container {
   display: flex;
-  width: 95%;
-  height: 95vh;
-  gap: 20px;
-  padding: 20px;
-  align-items: stretch;
+  width: 100%;
+  max-width: 1600px; /* Limitation de la largeur maximale */
+  height: 100vh; /* Réduction de la hauteur */
+  position: relative;
+  overflow: hidden;
+  margin: auto; /* Centrage */
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  padding: 15px; /* Réduction du padding */
+  padding-left: 10%;
+  padding-right: 10%;
+  transition: width 0.3s ease-in-out;
 }
 
 .console-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
+  padding: 10px 15px; /* Réduction du padding */
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -109,7 +121,7 @@ body {
 
 .reload-button {
   margin-left: 10px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 8px 15px;
@@ -137,13 +149,14 @@ body {
 }
 
 .console-container {
-  flex: 1; 
+  flex: 1;
   display: flex;
   flex-direction: column;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  max-height: 85vh;
 }
 
 .commands-container {
@@ -162,8 +175,9 @@ body {
   flex: 1;
   background-color: var(--console-bg);
   color: var(--console-text);
-  padding: 20px;
+  padding: 15px; /* Réduction du padding */
   overflow-y: auto;
+  max-height: auto; /* Limitation de la hauteur */
 }
 
 .message {
@@ -172,37 +186,72 @@ body {
   font-family: "Courier New", Courier, monospace;
 }
 
-
 .action-buttons {
   background-color: white;
-  padding: 20px;
+  padding: 15px; /* Réduction du padding */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px; /* Réduction du gap */
 }
 
-.commands-section{
+.commands-section-panel {
+  position: absolute;
+  top: 0;
+  right: -35%;
+  width: 35%;
+  height: 100vh; /* Ajustement pour correspondre à la hauteur principale */
   background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out;
+  z-index: 10;
+  padding: 15px; /* Réduction du padding */
+  overflow-y: auto;
+}
+
+.commands-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  flex: 1;
+  gap: 15px; /* Réduction du gap */
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px; /* Réduction de la marge */
+  padding-bottom: 8px; /* Réduction du padding */
+  border-bottom: 1px solid var(--border-color);
+}
+
+.close-panel-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-panel-btn:hover {
+  color: #333;
+}
+
+.common-commands {
+  display: flex;
+  gap: 8px; /* Réduction du gap */
+  flex-wrap: wrap;
 }
 
 .input-container,
 .input-container-cmd {
   display: flex;
-  gap: 10px;
+  gap: 8px; /* Réduction du gap */
 }
 
 #command-input {
   flex: 1;
-  padding: 10px;
+  padding: 8px; /* Réduction du padding */
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
@@ -211,11 +260,11 @@ body {
 .action-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px; /* Réduction du gap */
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 8px 16px; /* Réduction du padding */
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -241,12 +290,12 @@ body {
 .toggle-container-cmd {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px; /* Réduction du gap */
 }
 
 .toggle-container input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 16px; /* Réduction de la taille */
+  height: 16px; /* Réduction de la taille */
   cursor: pointer;
 }
 
@@ -274,9 +323,8 @@ body {
   height: 0;
 }
 
-
 .toggle-container-cmd {
-  padding: 10px 20px;
+  padding: 8px 16px; /* Réduction du padding */
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -372,44 +420,43 @@ body {
 
 /* LoRa Configuration Section */
 .lora-configuration {
-  padding: 15px;
+  padding: 12px; /* Réduction du padding */
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
 }
 
 .lora-configuration h3 {
-  margin-bottom: 15px;
-  font-size: 18px;
+  margin-bottom: 12px; /* Réduction de la marge */
+  font-size: 16px; /* Réduction de la taille */
   color: #333;
 }
 
 .input-container {
-  margin-bottom: 15px;
+  margin-bottom: 12px; /* Réduction de la marge */
   display: flex;
   flex-direction: column;
 }
 
 .input-container-cmd {
   display: flex;
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  gap: 10px;
+  padding: 12px;
+  /* background-color: #f8f8f8; */
+  border-top: 1px solid var(--border-color);
+  gap: 8px; /* Réduction du gap */
 }
 
 .input-container label,
 .input-container-cmd label {
-  font-size: 14px;
-  margin-bottom: 5px;
+  font-size: 13px; /* Réduction de la taille */
+  margin-bottom: 4px; /* Réduction de la marge */
   color: #555;
 }
 
 .input-container select,
 .input-container input[type="text"] {
-  padding: 8px;
-  font-size: 14px;
+  padding: 7px; /* Réduction du padding */
+  font-size: 13px; /* Réduction de la taille */
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -417,8 +464,8 @@ body {
 }
 
 .input-container-cmd input[type="text"] {
-  padding: 8px;
-  font-size: 14px;
+  padding: 7px; /* Réduction du padding */
+  font-size: 13px; /* Réduction de la taille */
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -427,8 +474,8 @@ body {
 }
 
 .input-container input[type="range"] {
-  padding: 8px 0;
-  font-size: 14px;
+  padding: 7px 0; /* Réduction du padding */
+  font-size: 13px; /* Réduction de la taille */
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -441,14 +488,14 @@ body {
 
 .input-container span,
 .input-container-cmd span {
-  margin-top: 5px;
+  margin-top: 4px; /* Réduction de la marge */
   font-size: 12px;
   color: #666;
 }
 
 .btn.primary {
-  padding: 10px 15px;
-  font-size: 14px;
+  padding: 8px 14px; /* Réduction du padding */
+  font-size: 13px; /* Réduction de la taille */
   color: #fff;
   background-color: #007bff;
   border: none;
@@ -463,20 +510,20 @@ body {
 #lora-power-value {
   font-weight: bold;
   color: black;
-  font-size: 15px;
+  font-size: 14px; /* Réduction de la taille */
 }
 
 .lora-preview-container {
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  align-items: center; 
+  gap: 8px; /* Réduction du gap */
+  align-items: center;
 }
 
 .command-preview {
   flex-grow: 1;
-  padding: 10px;
-  font-size: 14px;
+  padding: 8px; /* Réduction du padding */
+  font-size: 13px; /* Réduction de la taille */
   color: #333;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
@@ -484,6 +531,29 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.lora-toggle-btn {
+  position: fixed;
+  bottom: 20px; /* Remonté légèrement */
+  right: 20px; /* Déplacé légèrement */
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 18px; /* Réduction de la taille */
+  border-radius: 25px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 9;
+}
+
+.lora-toggle-btn:hover {
+  background-color: #0d5ca3;
+  transform: translateY(-2px);
+}
+
+.lora-toggle-btn i {
+  margin-right: 6px; /* Réduction de la marge */
 }
 
 @media (max-width: 768px) {
@@ -496,28 +566,37 @@ body {
   .commands-container {
     width: 100%;
   }
+
+  .page-container {
+    width: 100% !important;
+    padding: 10px; /* Réduction supplémentaire du padding pour mobile */
+  }
+
+  .commands-section-panel {
+    width: 75%;
+    right: -75%;
+  }
+
+  .lora-toggle-btn.panel-open {
+    right: 75%;
+  }
 }
-
-
-
-
-
 
 /* Snackbar Styles */
 #snackbar {
   visibility: hidden;
-  min-width: 250px;
+  min-width: 220px; /* Réduction de la largeur */
   background-color: white;
   color: black;
   text-align: center;
   box-shadow: #d1d1d1 0px 0px 5px;
   border-radius: 2px;
-  padding: 16px;
+  padding: 12px; /* Réduction du padding */
   position: fixed;
   z-index: 1;
-  left: 30px;
-  bottom: 30px;
-  font-size: 17px;
+  left: 20px; /* Déplacé légèrement */
+  bottom: 20px; /* Déplacé légèrement */
+  font-size: 15px; /* Réduction de la taille */
 }
 
 #snackbar.auto-close {
@@ -533,8 +612,8 @@ body {
 }
 
 #snackbar button {
-  margin-left: 10px;
-  padding: 8px 16px;
+  margin-left: 8px; /* Réduction de la marge */
+  padding: 6px 12px; /* Réduction du padding */
   background-color: var(--primary-color);
   color: #fff;
   border: none;
@@ -548,7 +627,7 @@ body {
     opacity: 0;
   }
   to {
-    bottom: 30px;
+    bottom: 20px; /* Ajusté pour correspondre à la position */
     opacity: 1;
   }
 }
@@ -559,14 +638,14 @@ body {
     opacity: 0;
   }
   to {
-    bottom: 30px;
+    bottom: 20px; /* Ajusté pour correspondre à la position */
     opacity: 1;
   }
 }
 
 @-webkit-keyframes fadeout {
   from {
-    bottom: 30px;
+    bottom: 20px; /* Ajusté pour correspondre à la position */
     opacity: 1;
   }
   to {
@@ -577,7 +656,7 @@ body {
 
 @keyframes fadeout {
   from {
-    bottom: 30px;
+    bottom: 20px; /* Ajusté pour correspondre à la position */
     opacity: 1;
   }
   to {

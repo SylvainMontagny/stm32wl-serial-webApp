@@ -1,5 +1,3 @@
-// main.js
-
 import SerialScaleController from "./SerialScaleController.js";
 
 const serialScaleController = new SerialScaleController();
@@ -24,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (reloadButton) {
     reloadButton.addEventListener("click", window.reloadPageWithCacheClear);
   }
+
+  // Initialisation du panneau LoRa
+  initLoraPanel();
 });
 
 connect.addEventListener("pointerdown", () => {
@@ -107,6 +108,79 @@ document
     }
   });
 
+// Fonction pour initialiser le panneau LoRa coulissant
+function initLoraPanel() {
+  const pageContainer = document.getElementById("page-container");
+  const commandsSectionPanel = document.getElementById(
+    "commands-section-panel"
+  );
+  const toggleLoraPanel = document.getElementById("toggle-lora-panel");
+  const closePanel = document.getElementById("close-panel");
+  let isPanelOpen = false;
+
+  // Vérifier que tous les éléments sont présents
+  if (
+    !pageContainer ||
+    !commandsSectionPanel ||
+    !toggleLoraPanel ||
+    !closePanel
+  ) {
+    console.error("Éléments manquants pour le panneau LoRa");
+    return;
+  }
+
+  // Fermer le panneau par défaut
+  commandsSectionPanel.style.right = "-35%";
+  pageContainer.style.width = "100%";
+
+  // Fonction pour basculer le panneau
+  function togglePanel() {
+    if (!isPanelOpen) {
+      // Afficher le panneau
+      commandsSectionPanel.style.right = "0";
+      pageContainer.style.width = "65%";
+      pageContainer.style.paddingLeft = "5%";
+      pageContainer.style.paddingRight = "5%";
+      toggleLoraPanel.style.right = "36%";
+      toggleLoraPanel.innerHTML =
+        '<i class="fas fa-broadcast-tower"></i> Exit LoRa Mode';
+      // Activer le mode LoRa
+      serialScaleController.writeToPort("lora");
+    } else {
+      // Masquer le panneau
+      commandsSectionPanel.style.right = "-35%";
+      pageContainer.style.width = "100%";
+      pageContainer.style.paddingLeft = "10%";
+      pageContainer.style.paddingRight = "10%";
+      toggleLoraPanel.style.right = "30px";
+      toggleLoraPanel.innerHTML =
+        '<i class="fas fa-broadcast-tower"></i> Enter LoRa Mode';
+      // Désactiver le mode LoRa (reset)
+      serialScaleController.writeToPort("r");
+    }
+    isPanelOpen = !isPanelOpen;
+  }
+
+  // Écouteurs d'événements pour l'ouverture/fermeture du panneau
+  toggleLoraPanel.addEventListener("click", togglePanel);
+  closePanel.addEventListener("click", togglePanel);
+
+  // Adaptation pour le responsive
+  window.addEventListener("resize", function () {
+    if (window.innerWidth <= 768 && isPanelOpen) {
+      toggleLoraPanel.classList.add("panel-open");
+    } else {
+      toggleLoraPanel.classList.remove("panel-open");
+    }
+  });
+
+  // Initialiser la prévisualisation de commande LoRa
+  updateLoraCommandPreview();
+}
+
+// Suppression du code précédent pour le toggle des panels
+// Le code suivant est maintenant remplacé par la fonction initLoraPanel()
+/*
 // Toggle visibility of panels
 const inputContainer = document.querySelector(".input-container-cmd");
 const loraTransmissionPanel = document.querySelector(".commands-section");
@@ -140,3 +214,4 @@ document.querySelectorAll(".toggle-container-cmd").forEach((container) => {
     }
   });
 });
+*/
