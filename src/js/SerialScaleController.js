@@ -6,10 +6,11 @@ export default class SerialScaleController {
   constructor() {
     this.encoder = new TextEncoder();
     this.decoder = new TextDecoder();
-    this.firstLine = true;
     this.buffer = "";
     this.port = null;
     this.currentColorClass = null;
+    this.isReading = false;
+    this.disconnectHandler = null;
   }
 
   async init(baudRate = 115200) {
@@ -18,24 +19,37 @@ export default class SerialScaleController {
         const port = await navigator.serial.requestPort();
         await port.open({ baudRate: parseInt(baudRate) });
         this.port = port;
+
+        this.disconnectHandler = this.handleDisconnect.bind(this);
+        this.port.addEventListener("disconnect", this.disconnectHandler);
+
         this.reader = port.readable.getReader();
         let signals = await port.getSignals();
         console.log(signals);
+
+        const connectButton = document.getElementById("connect-to-serial");
+        connectButton.textContent = "Connected";
+        connectButton.classList.add("connected");
+        connectButton.disabled = true; // Désactiver le bouton
+        showSnackBar("Connected to serial device", null, true);
+
+        this.isReading = true;
         this.readLoop();
       } catch (err) {
         if (err.message.includes("open")) {
           showSnackBar(
-            "Le périphérique est déjà connecté à une autre application ou fenêtre du navigateur.",
+            "The serial port is already open. Please close it first.",
             null,
             true
           );
         } else {
-          console.error("Erreur lors de l'ouverture du port série:", err);
+          console.error("Error opening serial port:", err);
+          showSnackBar("Error opening serial port", null, true);
         }
       }
     } else {
       console.error(
-        "Le Web Serial ne semble pas être activé dans votre navigateur. Essayez de l'activer en visitant:"
+        "Serial API not supported in this browser. Please use Chrome or Edge."
       );
       console.error(
         "chrome://flags/#enable-experimental-web-platform-features"
@@ -45,12 +59,18 @@ export default class SerialScaleController {
 
   async writeToPort(command) {
     try {
+      if (!this.port || !this.isReading) {
+        showSnackBar("Device not connected", null, true);
+        return;
+      }
+
       const writer = this.port.writable.getWriter();
       const data = this.encoder.encode(command + "\r");
       await writer.write(data);
       writer.releaseLock();
     } catch (error) {
       console.error("Error writing to serial port:", error);
+      this.handleDisconnect();
     }
   }
 
@@ -59,20 +79,22 @@ export default class SerialScaleController {
       const { value, done } = await this.reader.read();
       if (done) {
         console.log("[readLoop] DONE", done);
-        this.reader.releaseLock();
-        return;
+        this.handleDisconnect();
+        return null;
       }
       return this.decoder.decode(value, { stream: true });
     } catch (err) {
-      const errorMessage = `error reading data: ${err}`;
-      console.error(errorMessage);
-      return errorMessage;
+      console.error(`Error reading data: ${err}`);
+      this.handleDisconnect();
+      return null;
     }
   }
 
   async readLoop() {
-    while (true) {
+    while (this.isReading) {
       const data = await this.read();
+      if (!this.isReading) break;
+
       if (data) {
         this.buffer += data;
         if (this.buffer.includes("\n")) {
@@ -82,31 +104,71 @@ export default class SerialScaleController {
         }
       }
     }
+    console.log("[readLoop] Exiting read loop");
+  }
+
+  handleDisconnect() {
+    if (!this.isReading) return;
+
+    console.log("[handleDisconnect] Disconnecting from serial port");
+    this.isReading = false;
+
+    if (this.reader) {
+      try {
+        this.reader.releaseLock();
+      } catch (err) {
+        console.error("Error releasing reader lock:", err);
+      }
+      this.reader = null;
+    }
+
+    if (this.port) {
+      if (this.disconnectHandler) {
+        try {
+          this.port.removeEventListener("disconnect", this.disconnectHandler);
+        } catch (err) {
+          console.error("Error removing disconnect event listener:", err);
+        }
+      }
+
+      try {
+        this.port
+          .close()
+          .catch((e) => console.error("Error closing port:", e.message));
+      } catch (err) {
+        console.error("Error closing port:", err);
+      }
+      this.port = null;
+    }
+
+    const connectButton = document.getElementById("connect-to-serial");
+    connectButton.textContent = "Connect Serial Device";
+    connectButton.classList.remove("connected");
+    connectButton.disabled = false; // Réactiver le bouton
+    showSnackBar("Disconnected from serial device", null, true);
+
+    this.buffer = "";
+    this.currentColorClass = null;
   }
 
   parseAnsiCodes(text) {
-    // Nettoyage des codes non liés aux couleurs
     text = text.replace(/\x1b(?!\[)/g, "");
     text = text.replace(/\x1b\[\d+;\d+H/g, "");
     text = text.replace(/\x1b\[\d+J/g, "");
 
     let result = "";
 
-    // Support des formats ESP32 [0;32m et des formats standard \x1b[32m
     const ansiRegex = /(?:\x1b\[|\[)(\d+)(?:;(\d+))?m/g;
     let lastIndex = 0;
     let match;
 
-    // Si une couleur est déjà active au début du texte
     if (this.currentColorClass && !text.match(/^(?:\x1b\[|\[)\d+(?:;\d+)?m/)) {
       result += `<span class="${this.currentColorClass}">`;
     } else {
       this.currentColorClass = null;
     }
 
-    // Traitement de chaque code couleur dans le texte
     while ((match = ansiRegex.exec(text)) !== null) {
-      // Ajouter le texte entre les codes
       const textBefore = text.substring(lastIndex, match.index);
       if (textBefore) {
         if (this.currentColorClass) {
@@ -116,16 +178,13 @@ export default class SerialScaleController {
         }
       }
 
-      // Fermer la balise span précédente si une existe
       if (this.currentColorClass) {
         result += "</span>";
       }
 
-      // Analyser le code
       const primaryCode = parseInt(match[1], 10);
       const secondaryCode = match[2] ? parseInt(match[2], 10) : null;
 
-      // Déterminer la couleur
       const getColorClass = (code) => {
         const colors = [
           "black",
@@ -145,7 +204,6 @@ export default class SerialScaleController {
         return null;
       };
 
-      // Appliquer la couleur
       let colorClass = getColorClass(primaryCode);
       if (!colorClass && secondaryCode) {
         colorClass = getColorClass(secondaryCode);
@@ -159,7 +217,6 @@ export default class SerialScaleController {
       lastIndex = match.index + match[0].length;
     }
 
-    // Ajouter le texte restant
     if (lastIndex < text.length) {
       const remainingText = text.substring(lastIndex);
       result += remainingText;
