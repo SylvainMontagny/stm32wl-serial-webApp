@@ -141,9 +141,8 @@ function initLoraPanel() {
       pageContainer.style.width = "65%";
       pageContainer.style.paddingLeft = "5%";
       pageContainer.style.paddingRight = "5%";
-      toggleLoraPanel.style.right = "36%";
-      toggleLoraPanel.innerHTML =
-        '<i class="fas fa-broadcast-tower"></i> Exit LoRa Mode';
+      toggleLoraPanel.style.right = "35%";
+      toggleLoraPanel.innerHTML = '<i class="fas fa-chevron-right"></i>';
       // Activer le mode LoRa
       serialScaleController.writeToPort("lora");
     } else {
@@ -152,9 +151,8 @@ function initLoraPanel() {
       pageContainer.style.width = "100%";
       pageContainer.style.paddingLeft = "10%";
       pageContainer.style.paddingRight = "10%";
-      toggleLoraPanel.style.right = "30px";
-      toggleLoraPanel.innerHTML =
-        '<i class="fas fa-broadcast-tower"></i> Enter LoRa Mode';
+      toggleLoraPanel.style.right = "0";
+      toggleLoraPanel.innerHTML = '<i class="fas fa-chevron-left"></i>';
       // Désactiver le mode LoRa (reset)
       serialScaleController.writeToPort("r");
     }
