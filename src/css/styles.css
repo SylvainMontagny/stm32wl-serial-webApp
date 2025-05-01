@@ -96,12 +96,18 @@ body {
 .page-container {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 65%; 
   position: relative;
   padding: 15px;  
+  padding-left: 5%; 
+  padding-right: 5%; 
+  transition: all 0.3s ease-in-out;
+}
+
+.page-container.panel-closed {
+  width: 100%;
   padding-left: 10%;
   padding-right: 10%;
-  transition: all 0.3s ease-in-out;
 }
 
 .console-header {
@@ -198,7 +204,7 @@ body {
 .commands-section-panel {
   position: absolute;
   top: 0;
-  right: -35%;
+  right: 0; /* Panneau visible par défaut */
   width: 35%;
   height: 100vh;
   background-color: white;
@@ -207,6 +213,10 @@ body {
   z-index: 10;
   padding: 15px;  
   overflow-y: auto;
+}
+
+.commands-section-panel.closed {
+  right: -35%;
 }
 
 .commands-section {
@@ -228,6 +238,10 @@ body {
   display: flex;
   gap: 8px;  
   flex-wrap: wrap;
+}
+
+#enter-lora-mode-container {
+  margin-left: auto;
 }
 
 .input-container,
@@ -602,7 +616,7 @@ body {
 .lora-toggle-btn {
   position: fixed;
   top: 10%;
-  right: 0;
+  right: 35%;
   transform: translateY(-50%);
   background-color: var(--primary-color);
   color: white;

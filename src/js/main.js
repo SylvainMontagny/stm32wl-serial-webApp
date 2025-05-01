@@ -1,3 +1,6 @@
+//=============================================================================
+// IMPORTS AND INITIALIZATION
+//=============================================================================
 import SerialScaleController from "./SerialScaleController.js";
 
 const serialScaleController = new SerialScaleController();
@@ -6,6 +9,9 @@ const baudrateSelect = document.getElementById("baudrate-select");
 const commandInput = document.getElementById("command-input");
 const sendCommand = document.getElementById("send-command");
 
+//=============================================================================
+// PAGE RELOAD FUNCTIONALITY
+//=============================================================================
 window.reloadPageWithCacheClear = function () {
   if (window.caches) {
     caches.keys().then(function (names) {
@@ -23,15 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
     reloadButton.addEventListener("click", window.reloadPageWithCacheClear);
   }
 
-  // Initialisation du panneau LoRa
+  // Initialize LoRa panel on page load
   initLoraPanel();
 });
 
+//=============================================================================
+// SERIAL CONNECTION MANAGEMENT
+//=============================================================================
 connect.addEventListener("pointerdown", () => {
   const selectedBaudrate = baudrateSelect.value;
   serialScaleController.init(selectedBaudrate);
 });
 
+//=============================================================================
+// COMMAND INPUT HANDLING
+//=============================================================================
 sendCommand.addEventListener("click", async () => {
   const command = commandInput.value.trim();
   if (command) {
@@ -50,6 +62,41 @@ commandInput.addEventListener("keypress", async (e) => {
   }
 });
 
+//=============================================================================
+// LORA MODE CONTROLS
+//=============================================================================
+const buttonLoRa = document.getElementById("enter-lora-mode-container");
+const buttonLoRaText = document.getElementById("enter-lora-mode-label");
+const checkboxLoRa = document.getElementById("enter-lora-mode");
+
+// Add click event listener to the entire container
+buttonLoRa.addEventListener("click", async (event) => {
+  // Prevent default behavior if clicking on the div
+  if (event.target !== checkboxLoRa) {
+    event.preventDefault();
+
+    // Toggle checkbox state
+    checkboxLoRa.checked = !checkboxLoRa.checked;
+
+    // Apply corresponding logic
+    if (checkboxLoRa.checked) {
+      await serialScaleController.writeToPort("lora");
+      buttonLoRaText.innerHTML = "Exit LoRa Mode";
+      buttonLoRa.classList.add("active");
+    } else {
+      await serialScaleController.writeToPort("r");
+      buttonLoRaText.innerHTML = "Enter LoRa Mode";
+      buttonLoRa.classList.remove("active");
+    }
+  }
+});
+
+// Remove old event listener on checkbox to avoid duplicates
+checkboxLoRa.removeEventListener("change", () => {});
+
+//=============================================================================
+// COMMON COMMAND BUTTONS
+//=============================================================================
 document.getElementById("reset-device").addEventListener("click", async () => {
   await serialScaleController.writeToPort("r");
 });
@@ -62,10 +109,16 @@ document.getElementById("transmission").addEventListener("click", async () => {
   await serialScaleController.writeToPort("t");
 });
 
+//=============================================================================
+// LORA COMMAND CONFIGURATION AND PREVIEW
+//=============================================================================
 document.getElementById("lora-power").addEventListener("input", (e) => {
   document.getElementById("lora-power-value").textContent = e.target.value;
 });
 
+/**
+ * Updates the LoRa command preview based on current form values
+ */
 function updateLoraCommandPreview() {
   const channel = document.getElementById("lora-channel").value;
   const power = document.getElementById("lora-power").value;
@@ -108,56 +161,75 @@ document
     }
   });
 
-// Fonction pour initialiser le panneau LoRa coulissant
+//=============================================================================
+// LORA SLIDING PANEL INITIALIZATION
+//=============================================================================
+/**
+ * Initializes the sliding LoRa panel and its toggle functionality
+ */
 function initLoraPanel() {
   const pageContainer = document.getElementById("page-container");
   const commandsSectionPanel = document.getElementById(
     "commands-section-panel"
   );
   const toggleLoraPanel = document.getElementById("toggle-lora-panel");
-  let isPanelOpen = false;
+  let isPanelOpen = true; // Initialize as true to open panel by default
 
-  // Vérifier que tous les éléments sont présents
+  // Check that all elements exist
   if (!pageContainer || !commandsSectionPanel || !toggleLoraPanel) {
-    console.error("Éléments manquants pour le panneau LoRa");
+    console.error("Missing elements for LoRa panel");
     return;
   }
 
-  // Fermer le panneau par défaut
-  commandsSectionPanel.style.right = "-35%";
-  pageContainer.style.width = "100%";
+  // Temporarily disable transitions for initialization
+  pageContainer.style.transition = "none";
+  commandsSectionPanel.style.transition = "none";
+  toggleLoraPanel.style.transition = "none";
 
-  // Fonction pour basculer le panneau
+  // Open panel by default without animation
+  commandsSectionPanel.style.right = "0";
+  pageContainer.style.width = "65%";
+  pageContainer.style.paddingLeft = "5%";
+  pageContainer.style.paddingRight = "5%";
+  toggleLoraPanel.style.right = "35%";
+  toggleLoraPanel.innerHTML = '<i class="fas fa-chevron-right"></i>';
+
+  // Re-enable transitions after initial render
+  setTimeout(() => {
+    pageContainer.style.transition = "";
+    commandsSectionPanel.style.transition = "";
+    toggleLoraPanel.style.transition = "";
+  }, 50);
+
+  /**
+   * Toggles the panel open/closed state
+   */
   function togglePanel() {
-    // Animation plus fluide pour le panneau et le bouton
+    // Smoother animation for panel and button
     if (!isPanelOpen) {
-      // Ouvrir le panneau
+      // Open panel
       commandsSectionPanel.style.right = "0";
       pageContainer.style.width = "65%";
       pageContainer.style.paddingLeft = "5%";
       pageContainer.style.paddingRight = "5%";
       toggleLoraPanel.style.right = "35%";
       toggleLoraPanel.innerHTML = '<i class="fas fa-chevron-right"></i>';
-      // Activer le mode LoRa
-      serialScaleController.writeToPort("lora");
     } else {
-      // Fermer le panneau
+      // Close panel
       commandsSectionPanel.style.right = "-35%";
       pageContainer.style.width = "100%";
       pageContainer.style.paddingLeft = "10%";
       pageContainer.style.paddingRight = "10%";
       toggleLoraPanel.style.right = "0";
       toggleLoraPanel.innerHTML = '<i class="fas fa-chevron-left"></i>';
-      // Désactiver le mode LoRa (reset)
-      serialScaleController.writeToPort("r");
     }
     isPanelOpen = !isPanelOpen;
   }
 
-  // Écouteurs d'événements pour l'ouverture/fermeture du panneau
+  // Event listeners for panel toggle
   toggleLoraPanel.addEventListener("click", togglePanel);
 
-  // Adaptation pour le responsive
+  // Responsive adaptation
   window.addEventListener("resize", function () {
     if (window.innerWidth <= 768 && isPanelOpen) {
       toggleLoraPanel.classList.add("panel-open");
@@ -166,26 +238,33 @@ function initLoraPanel() {
     }
   });
 
-  // Initialiser la prévisualisation de commande LoRa
+  // Initialize LoRa command preview
   updateLoraCommandPreview();
 
-  // Initialiser le sélecteur de panel
+  // Initialize panel selector
   initPanelSelector();
 }
 
-// Fonction pour gérer le sélecteur de panels
+//=============================================================================
+// PANEL SELECTOR FUNCTIONALITY
+//=============================================================================
+/**
+ * Initializes and manages the panel selector dropdown
+ */
 function initPanelSelector() {
   const selectedPanel = document.getElementById("selected-panel");
   const panelDropdown = document.getElementById("panel-dropdown");
   const panelSelector = document.querySelector(".panel-selector");
   const panelOptions = document.querySelectorAll(".panel-option");
 
-  // Fonction pour mettre à jour la visibilité des options
+  /**
+   * Updates visibility of panel options based on current selection
+   */
   function updatePanelOptions() {
-    // Récupérer le texte actuellement sélectionné
+    // Get currently selected text
     const currentText = selectedPanel.textContent.trim();
 
-    // Afficher toutes les options puis cacher celle qui correspond à la sélection actuelle
+    // Show all options then hide the one matching current selection
     panelOptions.forEach((opt) => {
       opt.classList.remove("hidden");
       if (opt.textContent.trim() === currentText) {
@@ -194,45 +273,45 @@ function initPanelSelector() {
     });
   }
 
-  // Appliquer au chargement pour cacher l'option actuellement sélectionnée
+  // Apply on load to hide currently selected option
   updatePanelOptions();
 
-  // Ouvrir/fermer le dropdown au clic
+  // Toggle dropdown on click
   selectedPanel.addEventListener("click", () => {
     panelSelector.classList.toggle("open");
 
-    // Si le panel est ouvert, on s'assure que les bonnes options sont visibles
+    // If panel is open, ensure correct options are visible
     if (panelSelector.classList.contains("open")) {
       updatePanelOptions();
     }
   });
 
-  // Fermer le dropdown si on clique ailleurs
+  // Close dropdown when clicking elsewhere
   document.addEventListener("click", (event) => {
     if (!panelSelector.contains(event.target)) {
       panelSelector.classList.remove("open");
     }
   });
 
-  // Gestion de la sélection d'un panel
+  // Handle panel selection
   panelOptions.forEach((option) => {
     option.addEventListener("click", () => {
-      // Mettre à jour le texte sélectionné
+      // Update selected text
       selectedPanel.textContent = option.textContent;
 
-      // Fermer le dropdown
+      // Close dropdown
       panelSelector.classList.remove("open");
 
-      // Masquer tous les panels
+      // Hide all panels
       document.querySelectorAll(".panel-content").forEach((panel) => {
         panel.classList.add("hidden");
       });
 
-      // Afficher le panel sélectionné
+      // Show selected panel
       const panelId = option.getAttribute("data-panel") + "-panel";
       document.getElementById(panelId).classList.remove("hidden");
 
-      // Mettre à jour les options visibles
+      // Update visible options
       updatePanelOptions();
     });
   });

@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Serial Project</title>
+    <title>Web Serial</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="css/styles.css" />
     <link
       rel="stylesheet"
@@ -88,6 +89,17 @@
               </button>
               <button class="btn secondary" id="reset-device">Reset</button>
               <button class="btn secondary" id="help">Help</button>
+
+              <div class="toggle-container-cmd" id="enter-lora-mode-container">
+                <input type="checkbox" id="enter-lora-mode" />
+                <label
+                  for="enter-lora-mode"
+                  class="toggle-btn-cmd"
+                  id="enter-lora-mode-label"
+                >
+                  Enter LoRa Mode
+                </label>
+              </div>
             </div>
 
             <div class="lora-configuration">
