@@ -23,10 +23,26 @@ window.reloadPageWithCacheClear = function () {
   window.location.reload(true);
 };
 
+// Function to clear the console display area
+function clearConsoleDisplay() {
+  const messageContainer = document.querySelector(
+    "#serial-messages-container .message"
+  );
+  if (messageContainer) {
+    messageContainer.innerHTML = ""; // Clear the content
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const reloadButton = document.getElementById("reload-button");
   if (reloadButton) {
     reloadButton.addEventListener("click", window.reloadPageWithCacheClear);
+  }
+
+  // Add event listener for the new Clear button
+  const clearButton = document.getElementById("clear-console-button");
+  if (clearButton) {
+    clearButton.addEventListener("click", clearConsoleDisplay);
   }
 
   // Initialize LoRa panel on page load

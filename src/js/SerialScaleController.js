@@ -30,7 +30,7 @@ export default class SerialScaleController {
         const connectButton = document.getElementById("connect-to-serial");
         connectButton.textContent = "Connected";
         connectButton.classList.add("connected");
-        connectButton.disabled = true; // Désactiver le bouton
+        connectButton.disabled = true;
         showSnackBar("Connected to serial device", null, true);
 
         this.isReading = true;
@@ -91,16 +91,38 @@ export default class SerialScaleController {
   }
 
   async readLoop() {
+    const clearScreenSequence = "\x1b[0;0H\x1b[2J"; // Define CLEAR_SCREEN sequence
+
     while (this.isReading) {
       const data = await this.read();
       if (!this.isReading) break;
 
       if (data) {
         this.buffer += data;
+
+        // Check for CLEAR_SCREEN sequence anywhere in the buffer
+        const clearIndex = this.buffer.indexOf(clearScreenSequence);
+        if (clearIndex !== -1) {
+          // Clear the console display
+          this.clearConsoleDisplay();
+          // Remove the sequence and everything before it from the buffer
+          this.buffer = this.buffer.substring(
+            clearIndex + clearScreenSequence.length
+          );
+          // Reset current color state after clearing
+          this.currentColorClass = null;
+        }
+
+        // Process remaining buffer line by line
         if (this.buffer.includes("\n")) {
           const messages = this.buffer.split("\n");
-          this.buffer = messages.pop();
-          messages.forEach((message) => this.displayMessage(message));
+          this.buffer = messages.pop(); // Keep the potentially incomplete last part
+          messages.forEach((message) => {
+            if (message) {
+              // Avoid processing empty strings if multiple \n occur
+              this.displayMessage(message);
+            }
+          });
         }
       }
     }
@@ -144,7 +166,7 @@ export default class SerialScaleController {
     const connectButton = document.getElementById("connect-to-serial");
     connectButton.textContent = "Connect Serial Device";
     connectButton.classList.remove("connected");
-    connectButton.disabled = false; // Réactiver le bouton
+    connectButton.disabled = false;
     showSnackBar("Disconnected from serial device", null, true);
 
     this.buffer = "";
@@ -225,21 +247,37 @@ export default class SerialScaleController {
     return result;
   }
 
-  displayMessage(message) {
+  clearConsoleDisplay() {
     const messageContainer = document.querySelector(
       "#serial-messages-container .message"
     );
+    if (messageContainer) {
+      messageContainer.innerHTML = ""; // Clear the content
+    }
+  }
 
-    message = this.parseAnsiCodes(message);
+  displayMessage(message) {
+    // Ensure message is not just whitespace or empty before processing
+    if (!message || message.trim() === "") {
+      return;
+    }
 
+    const messageContainer = document.querySelector(
+      "#serial-messages-container .message"
+    );
+    if (!messageContainer) return; // Safety check
+
+    message = this.parseAnsiCodes(message.trimEnd()); // Trim trailing whitespace
+
+    // Append the parsed message
     if (message.includes("<span")) {
       messageContainer.innerHTML += message + "\n";
     } else {
       if (this.currentColorClass) {
         messageContainer.innerHTML += `<span class="${this.currentColorClass}">${message}</span>\n`;
       } else {
-        const textNode = document.createTextNode(message + "\n");
-        messageContainer.appendChild(textNode);
+        // Use innerHTML to ensure correct rendering even without spans
+        messageContainer.innerHTML += message + "\n";
       }
     }
 

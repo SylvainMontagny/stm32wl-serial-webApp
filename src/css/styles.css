@@ -1,4 +1,3 @@
-/* styles.css - Ce fichier contient les styles CSS pour l'application */
 
 @font-face {
   font-family: "SegoeUI";
@@ -114,18 +113,51 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;  
+  padding: 10px 15px;
   border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap; 
+  gap: 10px; 
 }
+
 
 .serial-connection {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0; 
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    flex-shrink: 0;
+}
+
+.clear-button {
+  background-color: #ffc107; 
+  color: #333;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px; 
+}
+
+.clear-button:hover {
+  background-color: #e0a800;
+}
+
+.clear-button i {
+  margin-right: 6px;
 }
 
 .reload-button {
-  margin-left: 10px;
+  
+  margin-left: 0; 
   background-color: #4caf50;
   color: white;
   border: none;
@@ -135,6 +167,7 @@ body {
   display: inline-flex;
   align-items: center;
   font-weight: 500;
+  font-size: 14px; 
 }
 
 .reload-button:hover {
@@ -182,7 +215,7 @@ body {
   color: var(--console-text);
   padding: 15px;  
   overflow-y: auto;
-  max-height: auto; /* Limitation de la hauteur */
+  max-height: auto;
 }
 
 .message {
@@ -204,7 +237,7 @@ body {
 .commands-section-panel {
   position: absolute;
   top: 0;
-  right: 0; /* Panneau visible par défaut */
+  right: 0; 
   width: 35%;
   height: 100vh;
   background-color: white;

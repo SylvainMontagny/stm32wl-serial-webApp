@@ -30,13 +30,14 @@
                 <option value="115200" selected>115200</option>
               </select>
             </div>
-            <button
-              id="reload-button"
-              class="reload-button"
-              onclick="reloadPageWithCacheClear()"
-            >
-              <i class="fas fa-sync-alt"></i> Restart Console
-            </button>
+            <div class="header-actions">
+              <button id="clear-console-button" class="clear-button">
+                <i class="fas fa-eraser"></i> Clear
+              </button>
+              <button id="reload-button" class="reload-button">
+                <i class="fas fa-sync-alt"></i> Restart Console
+              </button>
+            </div>
             <div class="toggle-container">
               <input type="checkbox" id="auto-scroll" checked />
               <label for="auto-scroll" class="toggle-btn">Auto-scroll</label>
