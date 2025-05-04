@@ -643,32 +643,6 @@ body {
   margin-right: 6px;  
 }
 
-@media (max-width: 768px) {
-  .main-container {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .console-container,
-  .commands-container {
-    width: 100%;
-  }
-
-  .page-container {
-    width: 100% !important;
-    padding: 10px; 
-  }
-
-  .commands-section-panel {
-    width: 75%;
-    right: -75%;
-  }
-
-  .lora-toggle-btn.panel-open {
-    right: 75%;
-  }
-}
-
 /* Snackbar Styles */
 #snackbar {
   visibility: hidden;

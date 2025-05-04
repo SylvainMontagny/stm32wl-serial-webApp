@@ -1,0 +1,187 @@
+/* responsive.css - Styles pour l'adaptabilité de l'application */
+
+@media (max-width: 992px) {
+    .page-container {
+      padding-left: 3%;
+      padding-right: 3%;
+    }
+  
+    .page-container.panel-closed {
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+  
+    .console-header {
+      padding: 8px 12px;
+      flex-wrap: wrap; 
+      gap: 8px; 
+    }
+  
+    .console-header h2 {
+      width: 100%; 
+      margin-bottom: 5px;
+      text-align: center;
+    }
+  
+    .serial-connection {
+       flex-grow: 1; 
+       justify-content: center; 
+    }
+  
+    .reload-button {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+  
+    #baudrate-select {
+        padding: 6px;
+        font-size: 13px;
+    }
+  
+    .toggle-container {
+        margin-left: auto; 
+    }
+  
+    .btn {
+      padding: 7px 14px;
+      font-size: 13px;
+    }
+  
+    .common-commands {
+      gap: 6px;
+    }
+  
+    .lora-configuration .input-container {
+      margin-bottom: 10px;
+    }
+  
+    .lora-preview-container {
+      flex-direction: column;
+      align-items: stretch; 
+    }
+  
+    .command-preview {
+      margin-top: 5px;
+      text-align: center;
+    }
+  
+    #send-lora-command {
+      width: 100%; 
+    }
+  
+    .lora-toggle-btn {
+      padding: 10px 12px;
+      font-size: 14px;
+      min-height: 80px;
+      min-width: 30px;
+    }
+  }
+  
+@media (max-width: 768px) {
+    .main-container {
+      flex-direction: column; 
+      height: auto; 
+      overflow-y: auto; 
+    }
+  
+    .page-container {
+      width: 100% !important; 
+      height: auto; 
+      min-height: 100vh; 
+      padding: 10px !important; 
+      padding-left: 2% !important;
+      padding-right: 2% !important;
+      transition: none !important; 
+      margin-bottom: 10px; 
+      position: relative; 
+      flex-shrink: 0; 
+    }
+  
+    .commands-section-panel {
+      width: 100%; 
+      height: auto; 
+      position: relative !important; 
+      right: auto !important; 
+      top: auto !important; 
+      z-index: auto !important; 
+      box-shadow: none !important; 
+      border-top: 1px solid var(--border-color); 
+      transition: none !important; 
+      padding: 10px;
+      overflow-y: visible; 
+    }
+  
+    .lora-toggle-btn {
+      display: none !important;
+    }
+  
+  
+    .console-header {
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .serial-connection {
+        width: auto; 
+        gap: 8px; 
+        align-items: center; 
+    }
+    
+    #connect-to-serial, #baudrate-select, .reload-button {
+        width: auto; 
+        text-align: center;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    #baudrate-select {
+        min-width: 150px; 
+    }
+  
+    .toggle-container {
+        margin-left: 0; 
+        justify-content: center; 
+        padding-top: 5px;
+    }
+  
+    .input-container-cmd {
+      gap: 5px;
+    }
+  
+    .common-commands {
+      flex-direction: row; 
+      flex-wrap: wrap; 
+      justify-content: center; 
+      gap: 8px; 
+    }
+  
+    #enter-lora-mode-container {
+      margin-left: 0; 
+      width: auto;
+      flex-grow: 1; 
+      display: flex;
+      justify-content: center;
+    }
+  
+    .lora-preview-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .command-preview {
+      margin-top: 5px;
+      text-align: center;
+    }
+  
+    #send-lora-command {
+      width: 100%;
+    }
+  
+    .panel-selector {
+      font-size: 14px;
+    }
+  
+    .selected-panel, .panel-option {
+      padding: 8px 12px;
+    }
+  }
