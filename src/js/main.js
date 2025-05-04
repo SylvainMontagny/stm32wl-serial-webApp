@@ -117,10 +117,6 @@ document.getElementById("reset-device").addEventListener("click", async () => {
   await serialScaleController.writeToPort("r");
 });
 
-document.getElementById("help").addEventListener("click", async () => {
-  await serialScaleController.writeToPort("h");
-});
-
 document.getElementById("transmission").addEventListener("click", async () => {
   await serialScaleController.writeToPort("t");
 });

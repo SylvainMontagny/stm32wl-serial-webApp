@@ -157,8 +157,6 @@
   
     #enter-lora-mode-container {
       margin-left: 0; 
-      width: auto;
-      flex-grow: 1; 
       display: flex;
       justify-content: center;
     }
