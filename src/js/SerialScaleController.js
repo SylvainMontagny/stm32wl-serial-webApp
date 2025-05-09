@@ -118,10 +118,7 @@ export default class SerialScaleController {
           const messages = this.buffer.split("\n");
           this.buffer = messages.pop(); // Keep the potentially incomplete last part
           messages.forEach((message) => {
-            if (message) {
-              // Avoid processing empty strings if multiple \n occur
-              this.displayMessage(message);
-            }
+            this.displayMessage(message);
           });
         }
       }
@@ -257,14 +254,10 @@ export default class SerialScaleController {
   }
 
   displayMessage(message) {
-    // Ensure message is not just whitespace or empty before processing
-    if (!message || message.trim() === "") {
-      return;
-    }
-
     const messageContainer = document.querySelector(
       "#serial-messages-container .message"
     );
+
     if (!messageContainer) return; // Safety check
 
     message = this.parseAnsiCodes(message.trimEnd()); // Trim trailing whitespace
